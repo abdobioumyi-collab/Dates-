@@ -352,6 +352,15 @@ label.tiny{font-size:13px;font-weight:700;color:var(--muted);display:block;margi
 .ts-st.paid{color:var(--paid);} .ts-st.unpaid{color:var(--unpaid);}
 .overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:65;}
 .overlay.show{display:block;}
+.newgrp-box{display:none;flex-direction:column;gap:8px;margin-top:8px;padding:10px;border:1px dashed var(--gold);border-radius:10px;background:var(--gold-soft);}
+.newgrp-box input[type=text]{width:100%;background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:9px 11px;font-family:inherit;font-size:13px;}
+.alarm-btn{width:42px;height:42px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface);font-size:19px;cursor:pointer;flex-shrink:0;}
+.alarm-btn.on{background:var(--gold);border-color:var(--gold);}
+#alarmOverlay{display:none;position:fixed;inset:0;z-index:200;background:#B91C1C;color:#fff;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px;animation:alarmflash .6s infinite alternate;}
+@keyframes alarmflash{from{background:#B91C1C;}to{background:#EF4444;}}
+#alarmOverlay h2{font-family:'Amiri','Segoe UI',serif;font-size:34px;margin:0;}
+#alarmOverlay .big{font-size:22px;font-weight:900;}
+#alarmOverlay button{background:#fff;color:#B91C1C;border:none;border-radius:14px;padding:16px 34px;font-size:20px;font-weight:900;cursor:pointer;font-family:inherit;}
 /* ---------- Accounts ---------- */
 .mchips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;margin-bottom:8px;}
 .mchip{flex-shrink:0;border:1px solid var(--border-strong);background:var(--surface);border-radius:20px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;color:var(--cream);}
@@ -429,6 +438,7 @@ label.tiny{font-size:13px;font-weight:700;color:var(--muted);display:block;margi
         <input id="topSearch" type="search" placeholder="🔎 دوّر على طالب بالاسم..." autocomplete="off">
         <div class="tsearch-results" id="topSearchResults"></div>
       </div>
+      <button class="alarm-btn" id="alarmBtn" title="منبّه الحصص (والصفحة مفتوحة)">🔕</button>
     </header>
     <main class="main" id="main"></main>
   </div>
@@ -793,6 +803,7 @@ function renderSchedule(){
     <div class="topline">
       <div><h2>الجدول الأسبوعي</h2><div class="sub">كل يوم في كارت، مرتب بالساعة، وكل حصة واضح فيها اسم المجموعة وأسماء طلابها</div></div>
       <div style="display:flex;gap:10px;">
+        <button class="btn" id="icsBtn">🔔 تذكيرات للتقويم</button>
         <button class="btn" onclick="window.print()">🖨️ طباعة</button>
         <button class="btn gold" id="addDayBtn">+ إضافة يوم</button>
       </div>
@@ -835,7 +846,7 @@ function renderSchedule(){
                 }).join('') : `<div class="empty-note">يوم مفتوح<br>لا توجد حصص</div>`}
                 <div class="add-slot-row">
                   <div class="time-selectors">${timeSelectorsHtml('newTime-'+idx, '13:00')}</div>
-                  <select id="newGroup-${idx}"><option value="">— اختر المجموعة —</option>${groupOptions}</select>
+                  ${groupSelectHtml('newGroup-'+idx,'','— اختر المجموعة —','')}
                   <button class="btn small gold" data-add-slot="${day}|${idx}">+ إضافة حصة</button>
                 </div>
               </div>
@@ -846,6 +857,186 @@ function renderSchedule(){
     </div>
   `;
 }
+
+/* ============================= GROUP SELECT + إنشاء مجموعة من نفس المكان ============================= */
+function groupSelectHtml(id, selected, emptyLabel, style){
+  return `<select id="${id}" onchange="onGroupSelChange('${id}')" style="${style||''}">
+      ${emptyLabel!=null?`<option value="">${emptyLabel}</option>`:''}
+      ${state.groups.map(g=>`<option value="${g.id}" ${g.id===selected?'selected':''}>${escapeHtml(g.name)}</option>`).join('')}
+      <option value="__new__">➕ إنشاء مجموعة جديدة...</option>
+    </select>
+    <div class="newgrp-box" id="${id}-new">
+      <input type="text" id="${id}-nn" placeholder="اسم المجموعة الجديدة">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="color" id="${id}-nc" value="${PALETTE[state.groups.length % PALETTE.length]}" style="width:44px;height:36px;padding:2px;flex-shrink:0;">
+        <button type="button" class="btn small gold" style="flex:1;justify-content:center;" onclick="createGroupInline('${id}')">إنشاء واختيارها</button>
+      </div>
+    </div>`;
+}
+function onGroupSelChange(id){
+  const sel=document.getElementById(id), box=document.getElementById(id+'-new');
+  if(!sel||!box) return;
+  const show = sel.value==='__new__';
+  box.style.display = show?'flex':'none';
+  if(show){ const i=document.getElementById(id+'-nn'); if(i) i.focus(); }
+}
+function createGroupInline(id){
+  const name=document.getElementById(id+'-nn').value.trim();
+  if(!name){ document.getElementById(id+'-nn').focus(); return; }
+  const g={id:uid(), name, color:document.getElementById(id+'-nc').value};
+  state.groups.push(g); save();
+  const sel=document.getElementById(id);
+  const opt=new Option(name,g.id);
+  sel.insertBefore(opt, sel.querySelector('option[value="__new__"]'));
+  sel.value=g.id;
+  document.getElementById(id+'-new').style.display='none';
+  document.getElementById(id+'-nn').value='';
+}
+
+/* ============================= تذكيرات الحصص ============================= */
+/* (1) تصدير للتقويم: ملف .ics فيه حصص أسبوعية متكررة + تنبيه قبل كل حصة */
+const ICS_DAYS = {'السبت':['SA',6],'الأحد':['SU',0],'الاثنين':['MO',1],'الثلاثاء':['TU',2],'الأربعاء':['WE',3],'الخميس':['TH',4],'الجمعة':['FR',5]};
+function icsEsc(t){ return String(t||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
+function icsEvents(){
+  const list=[];
+  state.days.forEach(day=>{
+    const info=ICS_DAYS[day]; if(!info) return;
+    (state.schedule[day]||[]).forEach(sl=>{
+      const g=groupById(sl.groupId); if(!g) return;
+      list.push({day, info, sl, g});
+    });
+  });
+  return list;
+}
+function buildIcs(lead){
+  const pad=n=>String(n).padStart(2,'0');
+  const now=new Date();
+  const stamp=now.toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Oxford Notebook//AR','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Oxford - الحصص'];
+  icsEvents().forEach(({info,sl,g})=>{
+    const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()+((info[1]-now.getDay()+7)%7));
+    const ds=d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+    const start=toMin(sl.time), end=Math.min(start+60,23*60+59);
+    const hm=m=>pad(Math.floor(m/60))+pad(m%60)+'00';
+    L.push('BEGIN:VEVENT',
+      'UID:'+sl.id+'@oxford-notebook',
+      'DTSTAMP:'+stamp,
+      'DTSTART:'+ds+'T'+hm(start),
+      'DTEND:'+ds+'T'+hm(end),
+      'RRULE:FREQ=WEEKLY;BYDAY='+info[0],
+      'SUMMARY:'+icsEsc('حصة '+g.name),
+      'DESCRIPTION:'+icsEsc('الساعة '+to12h(sl.time)),
+      'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc('حصة '+g.name+' بعد '+lead+' دقيقة'),'TRIGGER:-PT'+lead+'M','END:VALARM',
+      'END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  return L.join('\r\n');
+}
+function openIcsModal(){
+  const n=icsEvents().length;
+  openModal(`
+    <h3>🔔 تذكيرات الحصص للتقويم</h3>
+    <p style="margin:0 0 12px;font-weight:700;line-height:1.7;">هيتحوّل الجدول لـ <b>${n}</b> حصة أسبوعية متكررة في تقويم الموبايل، وكل حصة ليها تنبيه قبلها.</p>
+    <label class="tiny">نبّهني قبل الحصة بـ</label>
+    <select id="icsLead" style="width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:inherit;font-weight:700;">
+      ${[5,10,15,20,30].map(m=>`<option value="${m}" ${m===10?'selected':''}>${m} دقايق</option>`).join('')}
+    </select>
+    <ol style="font-size:13px;color:var(--muted);line-height:1.9;padding-inline-start:20px;margin:14px 0 0;">
+      <li>نزّل الملف، وافتحه من الموبايل بتطبيق «التقويم».</li>
+      <li>لو عدّلت الجدول بعدين: نزّل الملف تاني وافتحه — الحصص المتعدّلة غالباً بتتحدّث، لكن اللي <b>اتمسح</b> لازم تمسحه من التقويم بإيدك.</li>
+    </ol>
+    <div class="row"><button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn gold" id="icsGo" ${n?'':'disabled'}>⬇️ تنزيل الملف</button></div>`);
+  document.getElementById('icsGo').onclick=()=>{
+    const lead=parseInt(document.getElementById('icsLead').value)||10;
+    const blob=new Blob([buildIcs(lead)],{type:'text/calendar;charset=utf-8'});
+    const url=URL.createObjectURL(blob), a=document.createElement('a');
+    a.href=url; a.download='oxford-schedule.ics'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),2000); closeModal();
+  };
+}
+
+/* (2) منبّه جوه الصفحة: صوت عالي + اهتزاز + شاشة حمرا قبل الحصة (والصفحة مفتوحة) */
+const ALARM_LEAD = 10;
+let alarmOn = (()=>{ try{ return localStorage.getItem('ox_alarm')==='1'; }catch(e){ return false; } })();
+let audioCtx=null, sirenTimer=null, sirenStop=null, sirenOsc=null;
+const DAY_NAMES_JS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+function getAudio(){
+  try{
+    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+  }catch(e){}
+  return audioCtx;
+}
+function startSiren(){
+  stopSiren();
+  const ctx=getAudio(); if(!ctx) return;
+  try{
+    sirenOsc=ctx.createOscillator(); const gain=ctx.createGain();
+    sirenOsc.type='square'; gain.gain.value=0.6;
+    sirenOsc.connect(gain); gain.connect(ctx.destination); sirenOsc.start();
+    let hi=true;
+    sirenTimer=setInterval(()=>{
+      sirenOsc.frequency.setValueAtTime(hi?900:650,ctx.currentTime); hi=!hi;
+      if(navigator.vibrate) navigator.vibrate([350,150,350]);
+    },400);
+    sirenStop=setTimeout(stopSiren,90000);
+  }catch(e){}
+}
+function stopSiren(){
+  clearInterval(sirenTimer); clearTimeout(sirenStop);
+  try{ if(sirenOsc){ sirenOsc.stop(); sirenOsc.disconnect(); } }catch(e){}
+  sirenOsc=null; sirenTimer=null;
+  if(navigator.vibrate) navigator.vibrate(0);
+}
+function showAlarmOverlay(title, timeLabel, mins){
+  let o=document.getElementById('alarmOverlay');
+  if(!o){ o=document.createElement('div'); o.id='alarmOverlay'; document.body.appendChild(o); }
+  o.innerHTML=`<div style="font-size:64px">⏰</div><h2>حصة ${escapeHtml(title)}</h2><div class="big">الساعة ${timeLabel} — ${mins>0?'بعد '+mins+' دقيقة':'دلوقتي'}</div><button id="alarmStop">تمام، اوقف المنبّه</button>`;
+  o.style.display='flex';
+  document.getElementById('alarmStop').onclick=()=>{ stopSiren(); o.style.display='none'; };
+}
+function beep(){
+  const ctx=getAudio(); if(!ctx) return;
+  try{ const o=ctx.createOscillator(), g=ctx.createGain(); o.frequency.value=880; g.gain.value=0.3; o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(()=>o.stop(),250); }catch(e){}
+}
+function updateAlarmBtn(){
+  const b=document.getElementById('alarmBtn'); if(!b) return;
+  b.textContent=alarmOn?'🔔':'🔕'; b.classList.toggle('on',alarmOn);
+  b.title=alarmOn?'منبّه الحصص شغّال (الصفحة لازم تفضل مفتوحة)':'منبّه الحصص مقفول';
+}
+function checkAlarms(){
+  if(!alarmOn||!state) return;
+  const now=new Date(), nowMin=now.getHours()*60+now.getMinutes();
+  const dayName=DAY_NAMES_JS[now.getDay()];
+  const dateKey=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+  let fired={};
+  try{ fired=JSON.parse(localStorage.getItem('ox_fired')||'{}'); }catch(e){}
+  if(fired.date!==dateKey) fired={date:dateKey,ids:[]};
+  (state.schedule[dayName]||[]).forEach(sl=>{
+    const g=groupById(sl.groupId); if(!g) return;
+    const diff=toMin(sl.time)-nowMin;
+    if(diff<=ALARM_LEAD && diff>=0 && !fired.ids.includes(sl.id)){
+      fired.ids.push(sl.id);
+      try{ localStorage.setItem('ox_fired',JSON.stringify(fired)); }catch(e){}
+      showAlarmOverlay(g.name,to12h(sl.time),diff);
+      startSiren();
+      try{ if(window.Notification && Notification.permission==='granted') new Notification('حصة '+g.name+' الساعة '+to12h(sl.time),{body:diff>0?'بعد '+diff+' دقيقة':'دلوقتي',requireInteraction:true}); }catch(e){}
+    }
+  });
+}
+document.getElementById('alarmBtn').onclick=()=>{
+  alarmOn=!alarmOn;
+  try{ localStorage.setItem('ox_alarm',alarmOn?'1':'0'); }catch(e){}
+  updateAlarmBtn();
+  if(alarmOn){
+    beep();
+    try{ if(window.Notification && Notification.permission==='default') Notification.requestPermission(); }catch(e){}
+    showToast('🔔 المنبّه شغّال — هيرن قبل كل حصة بـ '+ALARM_LEAD+' دقايق طول ما الصفحة مفتوحة');
+  } else { stopSiren(); showToast('🔕 المنبّه اتقفل'); }
+};
+document.addEventListener('click',()=>{ if(alarmOn) getAudio(); });
+updateAlarmBtn();
+setInterval(checkAlarms,15000);
 
 /* ============================= ACCOUNTS (شهر بشهر) ============================= */
 function defaultMonthKey(){
@@ -1055,12 +1246,12 @@ function openBook(day,h){
     <h3>حجز ${hourLabel(h)}</h3>
     <p style="margin:0 0 14px;font-weight:700;">${escapeHtml(day)}</p>
     <label class="tiny">المجموعة</label>
-    <select id="bookGroup" style="width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:inherit;font-weight:700;">
-      ${state.groups.map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('')}
-    </select>
+    ${groupSelectHtml('bookGroup','',null,'width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:inherit;font-weight:700;')}
     <div class="row"><button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn gold" id="confirmBook">احجز</button></div>`);
+  onGroupSelChange('bookGroup');
   document.getElementById('confirmBook').onclick = ()=>{
     const gid = document.getElementById('bookGroup').value;
+    if(gid==='__new__'){ onGroupSelChange('bookGroup'); return; }
     if(!gid) return;
     if(!state.schedule[day]) state.schedule[day]=[];
     if(!state.days.includes(day)) state.days.push(day);
@@ -1068,6 +1259,27 @@ function openBook(day,h){
     state.freed = (state.freed||[]).filter(f=>!(f.day===day && Math.abs(toMin(f.time)-h*60)<60));
     save(); closeModal(); render();
   };
+}
+
+/* ============================= إضافة طلاب كتير مرة واحدة ============================= */
+function parseNames(text){
+  return (text||'').split(/\r?\n/)
+    .map(l=>l.replace(/^\s*(?:[0-9\u0660-\u0669]+\s*[-.)\u2013:]\s*|[-\u2022*]\s*)/,'').trim())
+    .filter(Boolean);
+}
+function addStudentsFromText(gid, text){
+  const names = parseNames(text);
+  const have = new Set(studentsOf(gid).map(s=>s.name.trim()));
+  let added=0, skipped=0;
+  names.forEach(name=>{
+    if(have.has(name)){ skipped++; return; }
+    have.add(name);
+    state.students.push({id:uid(), groupId:gid, name, payments:{}});
+    added++;
+  });
+  if(added) save();
+  showToast(added ? '✓ اتضاف '+added+' طالب'+(skipped?' — وتخطّيت '+skipped+' اسم مكرر':'') : (skipped?'الأسماء دي موجودة في المجموعة بالفعل':'اكتب اسم واحد على الأقل'));
+  return added;
 }
 
 /* ============================= GROUPS ============================= */
@@ -1120,19 +1332,15 @@ function openGroupDetail(gid){
           </span>
         </div>`).join('') : `<div class="empty-note">المجموعة فارغة.</div>`}
     </div>
-    <div style="display:flex;gap:10px;">
-      <input type="text" id="modalNewStudent" placeholder="اسم الطالب الجديد" style="flex:1;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:500;">
+    <div style="display:flex;gap:10px;align-items:flex-start;">
+      <textarea id="modalNewStudent" rows="3" placeholder="اكتب اسم أو أكتر — كل اسم في سطر" style="flex:1;font-family:inherit;font-weight:600;font-size:14px;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;resize:vertical;"></textarea>
       <button class="btn gold small" id="modalAddStudentBtn" data-group="${gid}" style="font-size:14px;">+ إضافة</button>
     </div>
     <div class="row"><button class="btn ghost" onclick="closeModal()">إغلاق النافذة</button></div>
   `);
   document.getElementById('modalAddStudentBtn').onclick = ()=>{
     const inp = document.getElementById('modalNewStudent');
-    const name = inp.value.trim();
-    if(!name) return;
-    state.students.push({id:uid(), groupId:gid, name, payments:{}});
-    save();
-    openGroupDetail(gid);
+    if(addStudentsFromText(gid, inp.value)) openGroupDetail(gid);
   };
   document.querySelectorAll('[data-del-student-modal]').forEach(b=>{
     b.onclick = ()=>{
@@ -1159,7 +1367,7 @@ function renderLedger(){
         ${groupOptions}
       </select>
       <div class="add-student-form" style="margin:0;">
-        <input type="text" id="ledgerNewStudent" placeholder="اسم طالب سريع للمجموعة">
+        <textarea id="ledgerNewStudent" rows="2" placeholder="اسم أو أكتر — كل اسم في سطر" style="font-family:inherit;font-weight:600;font-size:14px;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;resize:vertical;min-width:240px;"></textarea>
         <button class="btn gold small" id="ledgerAddStudentBtn">+ إضافة للكشف</button>
       </div>
     </div>
@@ -1294,6 +1502,7 @@ function attachHandlers(){
       const [day, idx] = b.dataset.addSlot.split('|');
       const time = readTimeSelectors('newTime-'+idx);
       const gid = document.getElementById('newGroup-'+idx).value;
+      if(gid==='__new__'){ onGroupSelChange('newGroup-'+idx); return; }
       if(!state.schedule[day]) state.schedule[day]=[];
       state.schedule[day].push({id:uid(), time, groupId: gid||null});
       save(); render();
@@ -1387,10 +1596,7 @@ function attachHandlers(){
         <label class="tiny">الساعة</label>
         <div class="time-selectors" style="margin-bottom:16px;">${timeSelectorsHtml('editSlot', slot.time)}</div>
         <label class="tiny">المجموعة</label>
-        <select id="editSlotGroup" style="width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:700;">
-          <option value="">— وقت فارغ —</option>
-          ${state.groups.map(g=>`<option value="${g.id}" ${g.id===slot.groupId?'selected':''}>${escapeHtml(g.name)}</option>`).join('')}
-        </select>
+        ${groupSelectHtml('editSlotGroup',slot.groupId,'— وقت فارغ —','width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:inherit;font-weight:700;')}
         <label style="display:flex;align-items:center;gap:8px;margin-top:16px;font-weight:700;color:#B91C1C;cursor:pointer;"><input type="checkbox" id="editSlotVacant" ${slot.vacant?'checked':''}> 🔴 الميعاد ده فاضي (المجموعة مبقتش تيجي) — هيتنقل للمواعيد الفاضية</label>
         <div class="row">
           <button class="btn ghost" onclick="closeModal()">إلغاء</button>
@@ -1399,6 +1605,7 @@ function attachHandlers(){
       document.getElementById('confirmEditSlot').onclick = ()=>{
         const t = readTimeSelectors('editSlot');
         const gid = document.getElementById('editSlotGroup').value;
+        if(gid==='__new__'){ onGroupSelChange('editSlotGroup'); return; }
         if(document.getElementById('editSlotVacant').checked){
           confirmAction('هل أنت متأكد من نقل هذا الميعاد ('+escapeHtml(day)+' — '+to12h(slot.time)+') للمواعيد الفاضية؟ هيتشال من الجدول وهيظهر في «بحث عن مواعيد».', ()=>{
             vacateSlot(day, slot.id); save(); render();
@@ -1430,6 +1637,8 @@ function attachHandlers(){
       });
     };
   });
+  const icsBtn = document.getElementById('icsBtn');
+  if(icsBtn) icsBtn.onclick = openIcsModal;
   const addDayBtn = document.getElementById('addDayBtn');
   if(addDayBtn) addDayBtn.onclick = ()=>{
     openModal(`
@@ -1508,13 +1717,8 @@ function attachHandlers(){
   if(ledgerAddBtn) ledgerAddBtn.onclick = ()=>{
     const gid = document.getElementById('ledgerGroupSelect').value;
     const inp = document.getElementById('ledgerNewStudent');
-    const name = inp.value.trim();
-    if(!gid){ alert('يجب تحديد مجموعة أولاً لكي تضيف الطالب إليها.'); return; }
-    if(!name) return;
-    state.students.push({id:uid(), groupId:gid, name, payments:{}});
-    inp.value='';
-    save();
-    renderLedgerTable(gid);
+    if(!gid){ alert('يجب تحديد مجموعة أولاً لكي تضيف الطلاب إليها.'); return; }
+    if(addStudentsFromText(gid, inp.value)){ inp.value=''; renderLedgerTable(gid); }
   };
 
   const searchInp = document.getElementById('globalSearchInput');
