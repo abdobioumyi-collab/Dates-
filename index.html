@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دفتر Oxford</title>
+<!-- تم حذف روابط Google Fonts الخارجية عشان الصفحة تفتح فورًا وبالكامل بدون إنترنت -->
+<style>
+:root{
+  /* الألوان الفاتحة والزاهية الجديدة */
+  --ink: #F0F4F8; /* خلفية عامة مريحة للعين */
+  --ink-2: #E2E8F0; /* خلفية الشريط الجانبي */
+  --surface: #FFFFFF; /* كروت بيضاء نقية */
+  --surface-2: #F8FAFC; 
+  --surface-3: #EDF2F7;
+  --gold: #0284C7; /* أزرق احترافي مريح كبديل للذهبي */
+  --gold-bright: #38BDF8;
+  --gold-soft: rgba(2, 132, 199, 0.08);
+  --cream: #1E293B; /* نصوص داكنة واضحة للقراءة */
+  --muted: #64748B; /* نصوص فرعية */
+  --paid: #10B981; /* أخضر زاهي ومبهج للدفع */
+  --unpaid: #EF4444; /* أحمر للتنبيه */
+  --border: #E2E8F0;
+  --border-strong: #CBD5E0;
+  --shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Tajawal', 'Segoe UI', Tahoma, Arial, sans-serif;
+  min-height: 100vh;
+}
+::selection{background:var(--gold-soft); color: var(--gold);}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+/* ---------- Layout ---------- */
+.app{display:flex;min-height:100vh;}
+.sidebar{
+  width:240px;flex-shrink:0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display:flex;flex-direction:column;
+  padding:28px 0;
+  position:sticky;top:0;height:100vh;
+  box-shadow: 2px 0 15px rgba(0,0,0,0.02);
+}
+.brand{padding:0 22px 24px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+.brand .stamp{
+  width:50px;height:50px;border:2px solid var(--gold);
+  background: var(--gold-soft);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif,'Segoe UI',Tahoma,Arial,sans-serif;font-weight:900;font-size:22px;color:var(--gold);
+  transform:rotate(-3deg);margin-bottom:12px;
+}
+.brand h1{font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:22px;margin:0 0 4px;color:var(--cream);line-height:1.4;}
+.brand p{margin:0;font-size:12px;color:var(--muted);}
+
+.nav{display:flex;flex-direction:column;gap:4px;padding:0 14px;}
+.nav button{
+  display:flex;align-items:center;gap:12px;
+  background:transparent;border:none;color:var(--muted);
+  font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif,'Segoe UI',Tahoma,Arial,sans-serif;font-size:14.5px;font-weight:700;
+  padding:12px 14px;border-radius:8px;cursor:pointer;
+  text-align:right;transition:all .2s ease;position:relative;
+}
+.nav button svg{width:19px;height:19px;flex-shrink:0;opacity:.85;}
+.nav button:hover{background:var(--surface-3);color:var(--cream);}
+.nav button.active{
+  background:var(--gold);color:#fff;
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
+}
+.sidebar-foot{margin-top:auto;padding:0 20px;font-size:11px;color:var(--muted);line-height:1.8;}
+
+.main{flex:1;padding:34px 40px;max-width:1400px;}
+.topline{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:26px;flex-wrap:wrap;gap:14px;}
+.topline h2{font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:30px;margin:0;color:var(--cream);}
+.topline .sub{color:var(--muted);font-size:13.5px;margin-top:4px;}
+
+/* ---------- Buttons ---------- */
+.btn{
+  border:1px solid var(--border-strong);background:var(--surface);color:var(--cream);
+  padding:9px 16px;border-radius:8px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif,'Segoe UI',Tahoma,Arial,sans-serif;font-weight:700;
+  font-size:13.5px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{border-color:var(--gold);color:var(--gold);background:var(--surface-2);}
+.btn.gold{background:var(--gold);color:#fff;border:none;box-shadow:0 4px 12px rgba(2, 132, 199, 0.2);}
+.btn.gold:hover{background:var(--gold-bright);transform:translateY(-1px);}
+.btn.danger{color:var(--unpaid);border-color:var(--border-strong);}
+.btn.danger:hover{border-color:var(--unpaid);background:rgba(239,68,68,.1);}
+.btn.small{padding:6px 12px;font-size:12px;border-radius:6px;}
+.btn.ghost{background:transparent;border-color:transparent;}
+.btn.ghost:hover{background:var(--surface-3);border-color:var(--border);}
+
+/* ---------- Cards / panels ---------- */
+.panel{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:24px;box-shadow:var(--shadow);
+}
+.grid-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:26px;}
+.stat{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;
+  position:relative;overflow:hidden;box-shadow:var(--shadow);
+}
+.stat::after{content:"";position:absolute;inset-inline-end:-30px;top:-30px;width:90px;height:90px;
+  background:radial-gradient(circle,var(--gold-soft),transparent 70%);}
+.stat .num{font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:36px;color:var(--gold);}
+.stat .lbl{font-size:13px;font-weight:700;color:var(--muted);margin-top:4px;}
+
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block;}
+/* ---------- Schedule table (جدول أسبوعي احترافي بنمط الأعمدة المتوازية) ---------- */
+.schedule-table-wrap{
+  border:1px solid var(--border);border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow);background:var(--surface);
+}
+.schedule-scroll{overflow-x:auto;}
+.schedule-grid{display:grid;min-width:100%;}
+.day-col{border-inline-start:1px solid var(--border);display:flex;flex-direction:column;min-width:180px;}
+.day-col:first-child{border-inline-start:none;}
+.day-col-head{
+  background:linear-gradient(180deg,var(--gold),var(--gold-bright));
+  color:#fff;padding:14px 10px;text-align:center;
+}
+.day-col-head h3{margin:0;font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:17px;font-weight:700;}
+.day-col-actions{display:flex;justify-content:center;gap:5px;margin-top:8px;}
+.day-col-actions button{
+  background:rgba(255,255,255,.18);border:none;color:#fff;width:24px;height:24px;
+  border-radius:6px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.15s;
+}
+.day-col-actions button:hover{background:rgba(255,255,255,.34);}
+.day-col-body{
+  padding:12px;display:flex;flex-direction:column;gap:8px;flex:1;
+  background:var(--surface-2);min-height:80px;
+}
+.slot-row{
+  display:flex;align-items:center;gap:8px;background:var(--surface);
+  border:1px solid var(--border-strong);border-radius:10px;padding:8px 10px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);transition:.15s;
+}
+.slot-row:hover{border-color:var(--gold);box-shadow:0 2px 8px rgba(2,132,199,0.1);}
+.slot-row input[type=time]{
+  border:none;background:transparent;font-weight:900;color:var(--gold);
+  font-size:13px;width:58px;padding:0;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;flex-shrink:0;
+}
+.slot-row .dot{width:9px;height:9px;flex-shrink:0;}
+.slot-row select{
+  flex:1;min-width:0;border:none;background:transparent;font-size:12.5px;
+  color:var(--cream);padding:2px 0;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:500;
+}
+.slot-row .slot-x{
+  position:static;flex-shrink:0;background:none;border:none;color:var(--muted);
+  cursor:pointer;font-size:13px;line-height:1;padding:2px;
+}
+.slot-row .slot-x:hover{color:var(--unpaid);}
+.empty-note{
+  color:var(--muted);font-size:12.5px;font-style:italic;padding:14px 6px;
+  background:var(--surface);border:1px dashed var(--border-strong);border-radius:10px;text-align:center;
+}
+.add-slot-row{
+  display:flex;flex-direction:column;gap:6px;padding-top:10px;
+  border-top:1px dashed var(--border-strong);margin-top:2px;
+}
+.add-slot-row input,.add-slot-row select{
+  width:100%;background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);
+  border-radius:7px;padding:7px 9px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:12.5px;
+}
+.add-slot-row .btn{width:100%;justify-content:center;}
+
+/* ---------- Slot cards (كل حصة كارت واضح فيه اسم المجموعة وأسماء طلابها) ---------- */
+.slot-card{
+  border-inline-start:4px solid var(--border-strong);border:1px solid var(--border-strong);
+  border-inline-start-width:4px;border-radius:10px;padding:9px 11px;cursor:pointer;
+  transition:.15s;box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.slot-card:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,0.08);}
+.slot-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.slot-card-time{font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:900;font-size:14.5px;color:var(--cream);}
+.slot-card-badge{
+  display:inline-block;font-size:13.5px;font-weight:900;border-radius:6px;
+  padding:5px 11px;line-height:1.5;
+}
+.slot-card-names{font-size:12.5px;color:var(--cream);line-height:1.6;font-weight:600;}
+.slot-card-empty{font-size:12px;color:var(--muted);font-style:italic;}
+.time-selectors{display:flex;gap:4px;}
+.time-selectors select{
+  flex:1;min-width:0;width:auto;background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);
+  border-radius:7px;padding:7px 4px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:12px;text-align:center;
+}
+
+
+/* ---------- Groups ---------- */
+.groups-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
+.group-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;
+  cursor:pointer;transition:.2s;border-top:4px solid var(--gold);position:relative;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+.group-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.group-card h4{margin:0 0 8px;font-size:16px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:900;}
+.group-card .cnt{font-size:13px;color:var(--muted);font-weight:500;}
+.group-card .paidbar{height:6px;border-radius:3px;background:var(--surface-3);margin-top:12px;overflow:hidden;}
+.group-card .paidbar > div{height:100%;background:var(--paid);transition:width .4s ease;}
+
+.new-group-form{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px;}
+.new-group-form input[type=text]{
+  background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);
+  border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:14px;min-width:240px;
+}
+.new-group-form input[type=color]{width:44px;height:40px;border:1px solid var(--border);background:none;cursor:pointer;padding:2px;border-radius:8px;}
+
+/* ---------- Ledger ---------- */
+.ledger-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;}
+.ledger-controls select,.ledger-controls input{
+  background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);
+  border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:14px;font-weight:500;
+}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,0.02);}
+table.ledger{border-collapse:collapse;width:100%;min-width:900px;font-size:14px;}
+table.ledger th,table.ledger td{padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);white-space:nowrap;}
+table.ledger thead th{background:var(--surface-2);color:var(--gold);font-weight:900;position:sticky;top:0;border-bottom:2px solid var(--border-strong);}
+table.ledger td.name-cell,table.ledger th.name-th{text-align:right;position:sticky;right:0;background:var(--surface);font-weight:700;min-width:180px;z-index:2;border-left:1px solid var(--border);}
+table.ledger thead th.name-th{background:var(--surface-2);z-index:3;}
+table.ledger tbody tr:hover td{background:var(--surface-2);}
+table.ledger tbody tr:hover td.name-cell{background:var(--surface-2);}
+
+.stamp-btn{
+  width:32px;height:32px;border-radius:8px;border:2px solid var(--border-strong);
+  background:var(--surface-3);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  color:transparent;font-size:16px;font-weight:900;transition:.2s;
+}
+.stamp-btn.paid{
+  border-color:var(--paid);background:var(--paid);color:#fff;
+  box-shadow:0 2px 8px rgba(16, 185, 129, 0.3);
+}
+.stamp-btn:hover{transform:scale(1.05);}
+.student-row-actions{display:flex;gap:4px;justify-content:flex-end;}
+.icon-x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:4px;border-radius:4px;}
+.icon-x:hover{color:var(--unpaid);background:rgba(239,68,68,0.1);}
+
+/* ---------- Search ---------- */
+.search-results{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
+.sr-row{
+  display:flex;align-items:center;justify-content:space-between;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;padding:14px 18px;flex-wrap:wrap;gap:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.02);
+}
+.sr-row .who{display:flex;align-items:center;gap:12px;}
+.sr-row .who b{font-size:15px;color:var(--cream);}
+.sr-row .grp-tag{font-size:12px;font-weight:700;background:var(--surface-3);color:var(--gold);
+  padding:4px 10px;border-radius:20px;}
+.sr-row .prog{font-size:13px;font-weight:700;color:var(--paid);}
+
+/* ---------- Modal ---------- */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+.modal-bg.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;
+  padding:26px;max-width:440px;width:100%;box-shadow:0 20px 40px rgba(0,0,0,0.1);}
+.modal h3{margin-top:0;font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;color:var(--gold);font-size:24px;}
+.modal .row{display:flex;gap:12px;justify-content:flex-end;margin-top:22px;}
+
+.section-title{font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:22px;color:var(--cream);margin:28px 0 14px;}
+.divider{height:1px;background:var(--border-strong);margin:26px 0;}
+
+label.tiny{font-size:13px;font-weight:700;color:var(--muted);display:block;margin-bottom:6px;}
+
+/* ---------- Hero (home) ---------- */
+.hero{
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;gap:26px;flex-wrap:wrap;
+  background: var(--surface);
+  border:1px solid var(--border-strong);border-radius:18px;
+  padding:36px 40px;margin-bottom:30px;box-shadow:var(--shadow);
+}
+.hero::before{
+  content:"";position:absolute;inset-inline-end:-60px;top:-60px;width:250px;height:250px;
+  background:radial-gradient(circle,var(--gold-soft),transparent 70%);pointer-events:none;
+}
+.hero::after{
+  content:"";position:absolute;bottom:0;right:0;left:0;height:4px;
+  background:var(--gold);
+}
+.hero-stamp{
+  width:88px;height:88px;flex-shrink:0;border-radius:16px;
+  background:var(--surface-2);border:2px solid var(--border-strong);
+  display:flex;align-items:center;justify-content:center;transform:rotate(-4deg);
+  font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif,'Segoe UI',Tahoma,Arial,sans-serif;font-weight:900;font-size:32px;color:var(--gold);
+  box-shadow:0 10px 25px rgba(2, 132, 199, 0.1);position:relative;z-index:1;
+}
+.hero-text{position:relative;z-index:1;min-width:220px;}
+.hero-eng{
+  font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif,'Segoe UI',Tahoma,Arial,sans-serif;font-size:13.5px;font-weight:900;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px;
+}
+.hero-name{font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:clamp(30px,4vw,46px);margin:0 0 8px;color:var(--cream);line-height:1.2;}
+.hero-tag{color:var(--muted);font-size:14.5px;font-weight:500;}
+
+/* ---------- Bottom mobile nav ---------- */
+@media print{
+  .sidebar,.topline .btn,.add-slot-row,.day-col-actions,.no-print{display:none !important;}
+  body{background:#fff;color:#000;}
+  .panel,.slot-row,.schedule-table-wrap{border-color:#ccc;background:#fff;box-shadow:none;}
+  .day-col-head{background:#eee !important;color:#000 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .day-col-head h3{color:#000;}
+  .day-col{break-inside:avoid;}
+}
+
+
+.slot-card.vacant{background:rgba(239,68,68,.08) !important;border-color:#EF4444 !important;border-inline-start-color:#EF4444 !important;}
+.slot-card-actions{display:flex;gap:6px;align-items:center;}
+.vac-btn{width:22px;height:22px;border-radius:50%;border:2px solid #EF4444;background:#fff;cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;color:transparent;font-size:12px;font-weight:900;line-height:1;}
+.vac-btn.on{background:#EF4444;color:#fff;}
+.vac-badge{background:#EF4444;color:#fff;font-weight:900;font-size:13.5px;border-radius:6px;padding:5px 11px;display:block;}
+.vac-old{font-size:11.5px;color:var(--muted);margin-top:4px;text-decoration:line-through;}
+.free-pair{margin-bottom:22px;}
+.free-pair h3{font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:21px;margin:0 0 14px;color:var(--cream);}
+.free-period{margin-bottom:12px;}
+.free-period .pl{font-size:13px;font-weight:900;color:var(--muted);margin-bottom:8px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{border:2px solid var(--paid);background:rgba(16,185,129,.08);color:#047857;font-weight:900;font-size:14px;padding:8px 14px;border-radius:10px;cursor:pointer;font-family:inherit;}
+.chip:hover{background:var(--paid);color:#fff;}
+.chip.fromvac{border-color:#EF4444;background:rgba(239,68,68,.08);color:#B91C1C;}
+.chip.fromvac:hover{background:#EF4444;color:#fff;}
+.vac-list{display:flex;flex-direction:column;gap:8px;}
+.vac-item{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:rgba(239,68,68,.06);border:1px solid #EF4444;border-radius:10px;padding:10px 14px;font-weight:700;font-size:14px;}
+.range-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px;}
+.range-row select{background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:8px 12px;font-family:inherit;font-weight:700;}
+
+.free-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.free-cols > div:first-child{border-inline-end:1px dashed var(--border-strong);padding-inline-end:16px;}
+@media print{.vac-btn{display:none !important;}}
+/* ---------- Layout v2: sidebar + topbar ---------- */
+.content{flex:1;min-width:0;}
+.sidebar{overflow-y:auto;}
+.nav-title{font-size:11px;font-weight:900;color:var(--muted);letter-spacing:.5px;padding:14px 14px 4px;opacity:.8;}
+.nav-badge{margin-inline-start:auto;background:#EF4444;color:#fff;border-radius:10px;padding:1px 8px;font-size:11.5px;font-weight:900;}
+.nav button.active .nav-badge{background:#fff;color:#EF4444;}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;padding:14px 40px;background:rgba(240,244,248,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+.menu-btn{display:none;width:42px;height:42px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface);font-size:20px;cursor:pointer;align-items:center;justify-content:center;color:var(--cream);flex-shrink:0;}
+.tsearch{position:relative;flex:1;max-width:600px;}
+.tsearch input{width:100%;background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);border-radius:12px;padding:11px 16px;font-family:inherit;font-size:14.5px;font-weight:500;}
+.tsearch input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft);}
+.tsearch-results{display:none;position:absolute;top:calc(100% + 6px);right:0;left:0;max-height:60vh;overflow:auto;background:var(--surface);border:1px solid var(--border-strong);border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.14);z-index:60;padding:6px;}
+.ts-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border-radius:10px;}
+.ts-row:hover{background:var(--surface-2);}
+.ts-st{font-size:12.5px;font-weight:900;}
+.ts-st.paid{color:var(--paid);} .ts-st.unpaid{color:var(--unpaid);}
+.overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:65;}
+.overlay.show{display:block;}
+/* ---------- Accounts ---------- */
+.mchips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;margin-bottom:8px;}
+.mchip{flex-shrink:0;border:1px solid var(--border-strong);background:var(--surface);border-radius:20px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;color:var(--cream);}
+.mchip.active{background:var(--gold);color:#fff;border-color:var(--gold);}
+.mchip .b{background:#EF4444;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;margin-inline-start:6px;}
+.mchip.active .b{background:#fff;color:#EF4444;}
+.seg{display:inline-flex;border:1px solid var(--border-strong);border-radius:10px;overflow:hidden;margin:6px 0 18px;}
+.seg button{border:none;background:var(--surface);padding:10px 20px;font-weight:900;cursor:pointer;font-family:inherit;color:var(--muted);font-size:14px;}
+.seg button.active.red{background:#EF4444;color:#fff;}
+.seg button.active.green{background:var(--paid);color:#fff;}
+.acc-grp{margin-bottom:20px;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 10px rgba(0,0,0,.03);}
+.acc-grp-head{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;font-weight:900;font-size:15px;}
+.acc-row{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface);border-top:1px solid var(--border);}
+.acc-name{flex:1;font-weight:700;font-size:15px;}
+.acc-price{color:var(--muted);font-size:13px;font-weight:700;white-space:nowrap;}
+.acc-price.none{color:#D97706;}
+.price-grp{margin-bottom:18px;}
+.price-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+.price-head h3{margin:0;font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:20px;}
+.bulk{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.price-in{width:110px;background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:8px 10px;font-family:inherit;font-weight:700;font-size:14px;text-align:center;}
+#toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1E293B;color:#fff;padding:12px 18px;border-radius:12px;z-index:90;align-items:center;gap:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:92vw;}
+@media print{.topbar,.overlay,#toast{display:none !important;}}
+@media (max-width:900px){
+  .sidebar{position:fixed;top:0;bottom:0;right:0;height:100%;width:280px;transform:translateX(100%);transition:transform .25s ease;z-index:70;padding-top:24px;box-shadow:none;}
+  .sidebar.open{transform:none;box-shadow:-10px 0 40px rgba(0,0,0,.18);}
+  .menu-btn{display:inline-flex;}
+  .topbar{padding:10px 14px;}
+  .main{padding:18px 16px 40px;}
+  .hero{padding:26px;gap:20px;}
+  .hero-stamp{width:70px;height:70px;font-size:24px;}
+  .schedule-scroll{-webkit-overflow-scrolling:touch;}
+  .day-col{min-width:150px;}
+  .day-col-head h3{font-size:14.5px;}
+  .slot-row{flex-wrap:nowrap;}
+  .slot-row select{font-size:11.5px;}
+  .free-cols{gap:10px;}
+  .free-cols > div:first-child{padding-inline-end:8px;}
+  .acc-row{padding:11px 12px;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="stamp">OX</div>
+      <h1 id="teacherNameDisp">Oxford</h1>
+      <p>تطبيق إدارة الجدول والطلاب</p>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-title">الشغل اليومي</div>
+      <button data-tab="schedule" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>الجدول الأسبوعي</button>
+      <button data-tab="free"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>بحث عن مواعيد</button>
+      <div class="nav-title">الحسابات</div>
+      <button data-tab="unpaid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>لسه ما دفعوش<span class="nav-badge" id="unpaidBadge"></span></button>
+      <button data-tab="prices"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>الأسعار</button>
+      <button data-tab="ledger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6l1 3H8l1-3z"/><path d="M6 6h12v15H6z"/><path d="m9.5 12 1.8 1.8L15 10"/></svg>كشف الدفع (السنة)</button>
+      <div class="nav-title">الإدارة</div>
+      <button data-tab="groups"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M15.5 13.2c2.7.3 4.8 2.4 5 6.3"/></svg>المجموعات والطلاب</button>
+      <button data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>نظرة عامة</button>
+      <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>الإعدادات السحابية</button>
+    </nav>
+    <div class="sidebar-foot">
+      يعمل التطبيق دائماً بدون إنترنت، ويتزامن مع السحابة تلقائياً عند توفر الاتصال.<br>
+      <span id="syncStatusText" style="font-weight:700;">📴 جاري العمل محلياً</span>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+  <div class="content">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
+      <div class="tsearch">
+        <input id="topSearch" type="search" placeholder="🔎 دوّر على طالب بالاسم..." autocomplete="off">
+        <div class="tsearch-results" id="topSearchResults"></div>
+      </div>
+    </header>
+    <main class="main" id="main"></main>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script>
+/* ============================= API SUPABASE ============================= */
+const SUPABASE_URL = 'https://lshnoigbdwythysummrn.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_6sNauvDaOh2YgUhV4IF71w_VnZhgBze';
+
+async function apiRequest(endpoint, method = 'GET', body = null, timeoutMs = 6000) {
+    const options = {
+        method,
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': method !== 'GET' ? 'return=representation' : ''
+        }
+    };
+    if (body) options.body = JSON.stringify(body);
+    // مهلة زمنية حتى لا يعلّق الطلب التطبيق في حال انعدام الإنترنت
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(), timeoutMs);
+    options.signal = controller.signal;
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, options);
+        if (!res.ok) throw new Error(await res.text());
+        return await res.json();
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+/* ============================= DATA ============================= */
+const STORAGE_KEY = 'ar_teacher_ledger_v1';
+const MONTHS = [
+  {k:'2026-08',l:'أغسطس 2026'},{k:'2026-09',l:'سبتمبر 2026'},{k:'2026-10',l:'أكتوبر 2026'},
+  {k:'2026-11',l:'نوفمبر 2026'},{k:'2026-12',l:'ديسمبر 2026'},{k:'2027-01',l:'يناير 2027'},
+  {k:'2027-02',l:'فبراير 2027'},{k:'2027-03',l:'مارس 2027'},{k:'2027-04',l:'أبريل 2027'},
+  {k:'2027-05',l:'مايو 2027'},{k:'2027-06',l:'يونيو 2027'},{k:'2027-07',l:'يوليو 2027'},
+  {k:'2027-08',l:'أغسطس 2027'}
+];
+const PALETTE = ['#0284C7','#10B981','#3B82F6','#F59E0B','#8B5CF6','#06B6D4','#DB2777','#84CC16'];
+
+function uid(){ return Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); }
+
+/* يحسب لون نص واضح (أبيض أو غامق) فوق أي لون خلفية — بيضمن ان أي لون زي الأصفر يفضل مقروء */
+function bestTextColor(hex){
+  if(!hex) return '#111827';
+  const c = hex.replace('#','');
+  const r=parseInt(c.substr(0,2),16), g=parseInt(c.substr(2,2),16), b=parseInt(c.substr(4,2),16);
+  const yiq = (r*299+g*587+b*114)/1000;
+  return yiq >= 150 ? '#111827' : '#ffffff';
+}
+
+/* نظام الساعة 12 (نظام ص/م) — التخزين الداخلي يفضل 24 ساعة لضمان الترتيب الصحيح، والعرض دايماً 12 ساعة */
+function to12h(t){
+  if(!t) return '';
+  let [h,m] = t.split(':').map(Number);
+  const ampm = h>=12 ? 'م' : 'ص';
+  let h12 = h%12; if(h12===0) h12=12;
+  return `${h12}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+function timeToParts(t){
+  let [h,m] = (t||'13:00').split(':').map(Number);
+  const ampm = h>=12 ? 'م' : 'ص';
+  let h12 = h%12; if(h12===0) h12=12;
+  return {h12, m, ampm};
+}
+function partsToTime24(h12, m, ampm){
+  let h = parseInt(h12)%12;
+  if(ampm==='م') h += 12;
+  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+}
+function timeSelectorsHtml(idPrefix, time){
+  const p = timeToParts(time);
+  const hours = Array.from({length:12},(_,i)=>i+1);
+  const mins = ['00','15','30','45'];
+  return `
+    <select id="${idPrefix}Hour">${hours.map(h=>`<option value="${h}" ${h===p.h12?'selected':''}>${h}</option>`).join('')}</select>
+    <select id="${idPrefix}Minute">${mins.map(m=>`<option value="${m}" ${Number(m)===p.m?'selected':''}>${m}</option>`).join('')}</select>
+    <select id="${idPrefix}AmPm"><option value="ص" ${p.ampm==='ص'?'selected':''}>ص</option><option value="م" ${p.ampm==='م'?'selected':''}>م</option></select>`;
+}
+function readTimeSelectors(idPrefix){
+  const h = document.getElementById(idPrefix+'Hour').value;
+  const m = document.getElementById(idPrefix+'Minute').value;
+  const ap = document.getElementById(idPrefix+'AmPm').value;
+  return partsToTime24(h, m, ap);
+}
+
+function defaultState(){
+  const g = (name,color)=>({id:uid(),name,color});
+  const g1=g('الصفوف 1-3 الابتدائي','#10B981'), g2=g('الصف الرابع الابتدائي','#3B82F6'),
+        g3=g('الصف الخامس الابتدائي','#8B5CF6'), g4=g('الصف السادس الابتدائي','#06B6D4'),
+        g5=g('الأول الإعدادي','#0284C7'), g6=g('الثاني الإعدادي','#F59E0B'),
+        g7=g('الثالث الإعدادي','#EF4444'), g8=g('الأول الثانوي','#84CC16'),
+        g9=g('الثاني الثانوي','#3B82F6'), g10=g('الثالث الثانوي','#8B5CF6');
+  const groups=[g1,g2,g3,g4,g5,g6,g7,g8,g9,g10];
+  const days=['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+  const mk=(t,gid)=>({id:uid(),time:t,groupId:gid});
+  const schedule={
+    'السبت':[mk('13:00',g1.id),mk('14:00',g2.id),mk('15:00',g3.id),mk('16:00',g4.id),mk('17:00',g5.id)],
+    'الأحد':[mk('13:00',g6.id),mk('14:00',g7.id),mk('15:00',g8.id),mk('16:00',g9.id),mk('17:00',g10.id)],
+    'الاثنين':[],
+    'الثلاثاء':[mk('13:00',g1.id),mk('14:00',g2.id),mk('15:00',g3.id),mk('16:00',g4.id),mk('17:00',g5.id)],
+    'الأربعاء':[mk('13:00',g6.id),mk('14:00',g7.id),mk('15:00',g8.id),mk('16:00',g9.id),mk('17:00',g10.id)],
+    'الخميس':[],
+    'الجمعة':[],
+  };
+  const timeRows = ['13:00','14:00','15:00','16:00','17:00'];
+  return {teacherName:'Oxford', teacherNameEn:'Oxford Educational App', groups, days, schedule, students:[], timeRows};
+}
+
+/* يضمن وجود قائمة "صفوف الساعات" حتى مع بيانات قديمة محفوظة سابقاً بدون هذا الحقل */
+function migrateState(){
+  if(!state) return;
+  if(!Array.isArray(state.freed)) state.freed = [];
+  Object.keys(state.schedule||{}).forEach(day=>{
+    const keep=[];
+    (state.schedule[day]||[]).forEach(sl=>{
+      if(sl.vacant) state.freed.push({id:sl.id,day,time:sl.time,groupId:sl.groupId||null});
+      else keep.push(sl);
+    });
+    state.schedule[day]=keep;
+  });
+  if(!Array.isArray(state.timeRows)){
+    const times = new Set();
+    Object.values(state.schedule||{}).forEach(arr=>(arr||[]).forEach(s=>times.add(s.time)));
+    state.timeRows = Array.from(times).sort((a,b)=>a.localeCompare(b));
+  }
+}
+
+function loadStateLocal(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    const parsed = JSON.parse(raw);
+    if(!parsed.groups || !parsed.days) return null;
+    return parsed;
+  }catch(e){ return null; }
+}
+
+let state = null;
+let saveTimeout;
+let syncStatus = 'local'; // 'local' | 'syncing' | 'synced' | 'offline'
+let hasPendingLocalChanges = false;
+
+/* التطبيق يعمل بدون إنترنت بشكل كامل وطبيعي:
+   1) يُحمَّل ويُعرض فوراً من التخزين المحلي (localStorage) دون انتظار أي شبكة.
+   2) في الخلفية وبصمت، يحاول المزامنة مع Supabase إن وُجد اتصال، فيرفع
+      أي تعديلات محلية معلّقة ويجلب آخر نسخة سحابية إن كانت أحدث.
+   3) أي تعديل يقوم به المستخدم يُحفظ محلياً فوراً بغضّ النظر عن حالة الشبكة،
+      ثم تتم محاولة رفعه للسحابة عند توفر الاتصال. */
+
+function setSyncStatus(s){
+  syncStatus = s;
+  const map = {
+    local:   {text:'📴 جاري العمل محلياً', color:'var(--muted)'},
+    syncing: {text:'🔄 جاري المزامنة مع السحابة...', color:'var(--gold)'},
+    synced:  {text:'✅ متزامن مع السحابة', color:'var(--paid)'},
+    offline: {text:'📴 لا يوجد اتصال — يعمل التطبيق محلياً بشكل طبيعي', color:'var(--muted)'},
+  };
+  const m = map[s] || map.local;
+  ['syncStatusText','syncStatusText2'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){ el.textContent = m.text; el.style.color = m.color; }
+  });
+}
+
+async function initApp() {
+    // 1) تحميل وعرض فوري من النسخة المحلية — بدون أي انتظار للشبكة
+    state = loadStateLocal() || defaultState();
+    render();
+    setSyncStatus(navigator.onLine ? 'syncing' : 'offline');
+
+    // 2) محاولة صامتة للمزامنة مع السحابة في الخلفية (لا تعطّل الواجهة أبداً)
+    trySyncWithCloud();
+
+    // إعادة المحاولة تلقائياً عند عودة الاتصال بالإنترنت
+    window.addEventListener('online', ()=>{ setSyncStatus('syncing'); trySyncWithCloud(); });
+    window.addEventListener('offline', ()=> setSyncStatus('offline'));
+}
+
+async function trySyncWithCloud(){
+    if(!navigator.onLine){ setSyncStatus('offline'); return; }
+    try {
+        const data = await apiRequest('oxford_state?id=eq.1');
+        if (data && data.length > 0 && data[0].data && Object.keys(data[0].data).length > 0) {
+            // إن لم توجد تعديلات محلية معلّقة، نأخذ آخر نسخة سحابية لضمان التزامن بين الأجهزة
+            if(!hasPendingLocalChanges){
+                state = data[0].data;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                render();
+            } else {
+                // في حال وجود تعديلات محلية لم تُرفع بعد، تُرفع فوراً بدل استبدالها
+                await apiRequest('oxford_state?id=eq.1', 'PATCH', { data: state });
+                hasPendingLocalChanges = false;
+            }
+        } else {
+            await apiRequest('oxford_state', 'POST', { id: 1, data: state });
+        }
+        setSyncStatus('synced');
+    } catch (e) {
+        console.warn('لم نتمكن من الاتصال بالسحابة، التطبيق يعمل محلياً بشكل طبيعي:', e);
+        setSyncStatus('offline');
+    }
+}
+
+function save() {
+    // تحديث محلي فوري — يعمل دائماً بغضّ النظر عن وجود إنترنت من عدمه
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    hasPendingLocalChanges = true;
+
+    // محاولة مزامنة صامتة في الخلفية إن وُجد اتصال؛ لا تمنع أو تُبطئ العمل المحلي أبداً
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(async () => {
+        if(!navigator.onLine){ setSyncStatus('offline'); return; }
+        setSyncStatus('syncing');
+        try {
+            await apiRequest('oxford_state?id=eq.1', 'PATCH', { data: state });
+            hasPendingLocalChanges = false;
+            setSyncStatus('synced');
+            console.log('تمت المزامنة بنجاح مع Supabase');
+        } catch (e) {
+            console.error('فشل الرفع إلى السحابة، سيُعاد المحاولة لاحقاً وتبقى البيانات محفوظة محلياً', e);
+            setSyncStatus('offline');
+        }
+    }, 1500); // تأخير ثانية ونصف لجمع التعديلات المتتالية
+}
+
+/* ============================= HELPERS ============================= */
+function groupById(id){ return state.groups.find(g=>g.id===id); }
+function studentsOf(gid){ return state.students.filter(s=>s.groupId===gid); }
+function paidCount(student){ return MONTHS.filter(m=>student.payments && student.payments[m.k]).length; }
+function timeLabel(t){
+  if(!t) return '';
+  let [h,m] = t.split(':').map(Number);
+  const ap = h>=12 ? 'م' : 'ص';
+  let hh = h%12; if(hh===0) hh=12;
+  return hh+':'+String(m).padStart(2,'0')+' '+ap;
+}
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ============================= MODAL ============================= */
+function openModal(html){
+  document.getElementById('modalBox').innerHTML = html;
+  document.getElementById('modalBg').classList.add('show');
+}
+function closeModal(){ document.getElementById('modalBg').classList.remove('show'); }
+document.getElementById('modalBg').addEventListener('click', e=>{ if(e.target.id==='modalBg') closeModal(); });
+
+function confirmAction(msg, onYes){
+  openModal(`
+    <h3>تأكيد</h3>
+    <p style="color:var(--cream);font-size:15px;line-height:1.7;font-weight:500;">${msg}</p>
+    <div class="row">
+      <button class="btn ghost" onclick="closeModal()">إلغاء</button>
+      <button class="btn danger" id="confirmYes">تأكيد الإجراء</button>
+    </div>`);
+  document.getElementById('confirmYes').onclick = ()=>{ onYes(); closeModal(); };
+}
+
+/* ============================= NAV ============================= */
+let activeTab = 'schedule';
+function openDrawer(){ document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
+function closeDrawer(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+document.getElementById('menuBtn').onclick = openDrawer;
+document.getElementById('overlay').onclick = closeDrawer;
+document.getElementById('nav').addEventListener('click', e=>{
+  const btn = e.target.closest('button[data-tab]');
+  if(!btn) return;
+  activeTab = btn.dataset.tab;
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active', b===btn));
+  closeDrawer();
+  render();
+  window.scrollTo(0,0);
+});
+
+/* ============================= RENDER ROUTER ============================= */
+function render(){
+  if(!state) return; // حماية
+  migrateState();
+  const main = document.getElementById('main');
+  document.getElementById('teacherNameDisp').textContent = state.teacherName;
+  if(activeTab==='home') main.innerHTML = renderHome();
+  else if(activeTab==='schedule') main.innerHTML = renderSchedule();
+  else if(activeTab==='free') main.innerHTML = renderFree();
+  else if(activeTab==='groups') main.innerHTML = renderGroups();
+  else if(activeTab==='ledger') main.innerHTML = renderLedger();
+  else if(activeTab==='unpaid') main.innerHTML = renderUnpaid();
+  else if(activeTab==='prices') main.innerHTML = renderPrices();
+  else if(activeTab==='settings') main.innerHTML = renderSettings();
+  const bd = document.getElementById('unpaidBadge');
+  if(bd){ const n = state.students.filter(x=>!isPaid(x,acc.month)).length; bd.textContent = n||''; bd.style.display = n?'':'none'; }
+  attachHandlers();
+  setSyncStatus(syncStatus);
+}
+
+/* ============================= HOME ============================= */
+function renderHome(){
+  const totalStudents = state.students.length;
+  const totalGroups = state.groups.length;
+  const now = new Date();
+  const curKey = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const curMonthLabel = MONTHS.find(m=>m.k===curKey)?.l || 'خارج فترة المتابعة';
+  const paidThisMonth = state.students.filter(s=>s.payments && s.payments[curKey]).length;
+  const totalSlots = Object.values(state.schedule).reduce((a,b)=>a+b.filter(x=>!x.vacant).length,0);
+  return `
+    <div class="hero">
+      <div class="hero-stamp">${(state.teacherNameEn||'APP').split(' ').filter(w=>/^[A-Za-z]/.test(w)).slice(-2).map(w=>w[0]).join('') || 'OX'}</div>
+      <div class="hero-text">
+        <div class="hero-eng">${escapeHtml(state.teacherNameEn || 'Oxford App')}</div>
+        <h1 class="hero-name">${escapeHtml(state.teacherName)}</h1>
+        <div class="hero-tag">تطبيق الإدارة السحابي — الجدول، المجموعات، وكشف الدفع</div>
+      </div>
+    </div>
+    <div class="topline">
+      <div><h2>نظرة عامة</h2><div class="sub">إحصائيات فورية لعملك</div></div>
+      <button class="btn gold" onclick="window.print()">🖨️ طباعة التقرير</button>
+    </div>
+    <div class="grid-stats">
+      <div class="stat"><div class="num">${totalGroups}</div><div class="lbl">عدد المجموعات</div></div>
+      <div class="stat"><div class="num">${totalStudents}</div><div class="lbl">إجمالي الطلاب</div></div>
+      <div class="stat"><div class="num">${totalSlots}</div><div class="lbl">حصص مجدولة أسبوعياً</div></div>
+      <div class="stat"><div class="num">${paidThisMonth}/${totalStudents||0}</div><div class="lbl">دافعين شهر ${curMonthLabel}</div></div>
+    </div>
+    <div class="panel">
+      <div class="section-title" style="margin-top:0;">حالة المجموعات</div>
+      <div class="groups-wrap">
+        ${state.groups.map(g=>{
+          const sts = studentsOf(g.id);
+          const total = sts.length*MONTHS.length || 1;
+          const paid = sts.reduce((a,s)=>a+paidCount(s),0);
+          const pct = Math.round(paid/total*100);
+          return `<div class="group-card" style="border-top-color:${g.color}" onclick="goLedger('${g.id}')">
+            <h4>${escapeHtml(g.name)}</h4>
+            <div class="cnt">${sts.length} طالب</div>
+            <div class="paidbar"><div style="width:${pct}%;background:${g.color}"></div></div>
+          </div>`;
+        }).join('') || `<div class="empty-note">لا توجد مجموعات بعد. ابدأ بإضافتها من التبويب المخصص.</div>`}
+      </div>
+    </div>
+  `;
+}
+function goLedger(gid){
+  activeTab='ledger';
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active', b.dataset.tab==='ledger'));
+  render();
+  setTimeout(()=>{ const sel=document.getElementById('ledgerGroupSelect'); if(sel){ sel.value=gid; sel.dispatchEvent(new Event('change')); } },0);
+}
+
+/* ============================= SCHEDULE ============================= */
+function renderSchedule(){
+  const groupOptions = state.groups.map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('');
+  const colCount = Math.max(state.days.length, 1);
+  return `
+    <div class="topline">
+      <div><h2>الجدول الأسبوعي</h2><div class="sub">كل يوم في كارت، مرتب بالساعة، وكل حصة واضح فيها اسم المجموعة وأسماء طلابها</div></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn" onclick="window.print()">🖨️ طباعة</button>
+        <button class="btn gold" id="addDayBtn">+ إضافة يوم</button>
+      </div>
+    </div>
+    <div class="schedule-table-wrap">
+      <div class="schedule-scroll">
+        <div class="schedule-grid" style="grid-template-columns:repeat(${colCount}, minmax(220px, 1fr));">
+          ${state.days.map((day,idx)=>{
+            const slots = (state.schedule[day]||[]).slice().sort((a,b)=>a.time.localeCompare(b.time));
+            return `
+            <div class="day-col">
+              <div class="day-col-head">
+                <h3>${escapeHtml(day)}</h3>
+                <div class="day-col-actions">
+                  <button data-move-day="${idx}" data-dir="-1" title="حرّك لليمين">←</button>
+                  <button data-move-day="${idx}" data-dir="1" title="حرّك لليسار">→</button>
+                  <button data-del-day="${escapeHtml(day)}" title="إلغاء اليوم">✕</button>
+                </div>
+              </div>
+              <div class="day-col-body">
+                ${slots.length ? slots.map(s=>{
+                  const g = groupById(s.groupId);
+                  const vac = !!s.vacant;
+                  const badgeFg = g ? bestTextColor(g.color) : '#111827';
+                  const color = vac ? '#EF4444' : (g ? g.color : '#94A3B8');
+                  return `<div class="slot-card ${vac?'vacant':''}" style="border-inline-start-color:${color};${vac?'':`background:${color}0d;`}" data-edit-slot="${day}|${s.id}">
+                    <div class="slot-card-top">
+                      <span class="slot-card-time">${to12h(s.time)}</span>
+                      <span class="slot-card-actions">
+                        
+                        <button class="slot-x" data-del-slot="${day}|${s.id}" title="حذف الحصة">✕</button>
+                      </span>
+                    </div>
+                    ${vac
+                      ? `<div class="vac-badge">🔴 فاضي</div>${g?`<div class="vac-old">${escapeHtml(g.name)}</div>`:''}`
+                      : (g
+                        ? `<div class="slot-card-badge" style="background:${g.color};color:${badgeFg};">${escapeHtml(g.name)}</div>`
+                        : `<div class="slot-card-empty">— وقت فارغ —</div>`)}
+                  </div>`;
+                }).join('') : `<div class="empty-note">يوم مفتوح<br>لا توجد حصص</div>`}
+                <div class="add-slot-row">
+                  <div class="time-selectors">${timeSelectorsHtml('newTime-'+idx, '13:00')}</div>
+                  <select id="newGroup-${idx}"><option value="">— اختر المجموعة —</option>${groupOptions}</select>
+                  <button class="btn small gold" data-add-slot="${day}|${idx}">+ إضافة حصة</button>
+                </div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================= ACCOUNTS (شهر بشهر) ============================= */
+function defaultMonthKey(){
+  const n=new Date(); const k=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');
+  return MONTHS.some(m=>m.k===k)?k:MONTHS[0].k;
+}
+let acc = {month: defaultMonthKey(), group:'', view:'unpaid'};
+const money = n => (n||0).toLocaleString('en-US')+' جنيه';
+function isPaid(st,mk){ return !!(st.payments && st.payments[mk]); }
+/* المبلغ بيتثبّت وقت الدفع، فتغيير السعر بعد كده مش بيبوّظ حساب شهور فاتت */
+function amountPaid(st,mk){ const a = st.amounts && st.amounts[mk]; return typeof a==='number' ? a : (st.price||0); }
+function setPaid(sid,mk,paid){
+  const st = state.students.find(x=>x.id===sid); if(!st) return;
+  if(!st.payments) st.payments = {};
+  if(!st.amounts) st.amounts = {};
+  st.payments[mk] = !!paid;
+  if(paid) st.amounts[mk] = st.price||0; else delete st.amounts[mk];
+  save();
+}
+let toastTimer;
+function showToast(msg, undoFn){
+  let t=document.getElementById('toast');
+  if(!t){ t=document.createElement('div'); t.id='toast'; document.body.appendChild(t); }
+  t.innerHTML = `<span>${msg}</span>` + (undoFn?'<button class="btn small" id="toastUndo">تراجع</button>':'');
+  t.style.display='flex';
+  if(undoFn) document.getElementById('toastUndo').onclick = ()=>{ undoFn(); t.style.display='none'; };
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>{ t.style.display='none'; },6000);
+}
+function renderUnpaid(){
+  const mk = acc.month;
+  const ml = MONTHS.find(m=>m.k===mk).l;
+  const scope = state.students.filter(s=>!acc.group || s.groupId===acc.group);
+  const paidL = scope.filter(s=>isPaid(s,mk)), unpaidL = scope.filter(s=>!isPaid(s,mk));
+  const paidAmt = paidL.reduce((a,s)=>a+amountPaid(s,mk),0);
+  const unpaidAmt = unpaidL.reduce((a,s)=>a+(s.price||0),0);
+  const monthChips = MONTHS.map(m=>{
+    const n = scope.filter(s=>!isPaid(s,m.k)).length;
+    return `<button class="mchip ${m.k===mk?'active':''}" data-acc-month="${m.k}">${m.l}${n?`<span class="b">${n}</span>`:''}</button>`;
+  }).join('');
+  const groupChips = `<button class="mchip ${!acc.group?'active':''}" data-acc-group="">كل المجموعات</button>` +
+    state.groups.map(g=>`<button class="mchip ${acc.group===g.id?'active':''}" data-acc-group="${g.id}">${escapeHtml(g.name)}</button>`).join('');
+  const showPaid = acc.view==='paid';
+  const list = showPaid ? paidL : unpaidL;
+  const groupsHtml = state.groups.filter(g=>!acc.group||g.id===acc.group).map(g=>{
+    const sts = list.filter(s=>s.groupId===g.id).sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+    if(!sts.length) return '';
+    const sub = sts.reduce((a,s)=>a+(showPaid?amountPaid(s,mk):(s.price||0)),0);
+    return `<div class="acc-grp">
+      <div class="acc-grp-head" style="background:${g.color};color:${bestTextColor(g.color)};"><span>${escapeHtml(g.name)} — ${sts.length} طالب</span><span>${money(sub)}</span></div>
+      ${sts.map(s=>`<div class="acc-row">
+        <span class="acc-name">${escapeHtml(s.name)}</span>
+        <span class="acc-price ${(showPaid?amountPaid(s,mk):s.price)?'':'none'}">${(showPaid?amountPaid(s,mk):s.price)?money(showPaid?amountPaid(s,mk):s.price):'حدد السعر'}</span>
+        ${showPaid
+          ? `<button class="btn small" data-acc-unpay="${s.id}">↩ رجّعه لسه</button>`
+          : `<button class="btn small gold" data-acc-pay="${s.id}">✓ دفع</button>`}
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+  return `
+    <div class="topline">
+      <div><h2>الحسابات — ${ml}</h2><div class="sub">كل شهر حسابه لوحده، من غير ما يتجمع عليه القديم</div></div>
+      <button class="btn" onclick="window.print()">🖨️ طباعة</button>
+    </div>
+    <div class="mchips">${monthChips}</div>
+    <div class="mchips">${groupChips}</div>
+    <div class="grid-stats">
+      <div class="stat"><div class="num" style="color:var(--unpaid)">${unpaidL.length}</div><div class="lbl">لسه ما دفعوش — ${money(unpaidAmt)}</div></div>
+      <div class="stat"><div class="num" style="color:var(--paid)">${paidL.length}</div><div class="lbl">دفعوا — ${money(paidAmt)}</div></div>
+      <div class="stat"><div class="num">${scope.length}</div><div class="lbl">إجمالي الطلاب في الفلتر</div></div>
+    </div>
+    <div class="seg">
+      <button class="red ${!showPaid?'active':''}" data-acc-view="unpaid">لسه ما دفعوش (${unpaidL.length})</button>
+      <button class="green ${showPaid?'active':''}" data-acc-view="paid">دفعوا (${paidL.length})</button>
+    </div>
+    ${groupsHtml || `<div class="empty-note" style="padding:24px;">${showPaid?'محدش دفع في الشهر ده لسه.':(scope.length?'🎉 الكل دافع في '+ml:'مفيش طلاب في الفلتر ده.')}</div>`}
+  `;
+}
+
+/* ============================= PRICES ============================= */
+function groupMonthly(gid){ return studentsOf(gid).reduce((a,s)=>a+(s.price||0),0); }
+function renderPrices(){
+  return `
+    <div class="topline">
+      <div><h2>أسعار الطلاب</h2><div class="sub">اكتب سعر كل طالب، أو سعر موحد للمجموعة كلها. بيتحفظ لوحده.</div></div>
+    </div>
+    ${state.groups.map(g=>{
+      const sts = studentsOf(g.id).slice().sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+      return `<div class="panel price-grp" style="border-top:4px solid ${g.color}">
+        <div class="price-head"><h3>${escapeHtml(g.name)}</h3><span style="font-weight:900;color:var(--gold);">إجمالي شهري: <span id="pt-${g.id}">${money(groupMonthly(g.id))}</span></span></div>
+        ${sts.length?`
+        <div class="bulk"><input type="number" min="0" inputmode="numeric" class="price-in" id="bulk-${g.id}" placeholder="سعر موحد"><button class="btn small gold" data-bulk="${g.id}">تطبيق على الكل</button></div>
+        ${sts.map(s=>`<div class="acc-row" style="border:1px solid var(--border);border-radius:10px;margin-bottom:6px;">
+          <span class="acc-name">${escapeHtml(s.name)}</span>
+          <input type="number" min="0" inputmode="numeric" class="price-in" data-price="${s.id}" data-pgroup="${g.id}" value="${s.price!=null?s.price:''}" placeholder="—"> <span class="acc-price">جنيه</span>
+        </div>`).join('')}`:`<div class="empty-note">مفيش طلاب في المجموعة دي.</div>`}
+      </div>`;
+    }).join('') || `<div class="empty-note">مفيش مجموعات.</div>`}
+  `;
+}
+
+/* ============================= TOP SEARCH ============================= */
+function runTopSearch(q){
+  const box = document.getElementById('topSearchResults');
+  q = (q||'').trim();
+  if(!q){ box.style.display='none'; box.innerHTML=''; return; }
+  const mk = acc.month, ml = MONTHS.find(m=>m.k===mk).l;
+  const res = state.students.filter(s=>s.name.includes(q)).slice(0,30);
+  box.style.display='block';
+  box.innerHTML = res.length ? res.map(s=>{
+    const g = groupById(s.groupId), paid = isPaid(s,mk);
+    return `<div class="ts-row">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span class="dot" style="background:${g?g.color:'#94A3B8'}"></span><b>${escapeHtml(s.name)}</b>
+        <span class="grp-tag" style="font-size:11.5px;font-weight:700;background:${g?g.color+'20':''};color:${g?g.color:''};padding:3px 9px;border-radius:20px;">${g?escapeHtml(g.name):'غير مصنف'}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="ts-st ${paid?'paid':'unpaid'}">${paid?'✓ دفع':'لسه ما دفع'} ${ml}</span>
+        ${paid?`<button class="btn small" data-ts="${s.id}">↩ تراجع</button>`:`<button class="btn small gold" data-ts="${s.id}">✓ دفع</button>`}
+      </div>
+    </div>`;
+  }).join('') : `<div class="empty-note" style="margin:6px;">مفيش طالب اسمه فيه "${escapeHtml(q)}".</div>`;
+}
+(function(){
+  const inp = document.getElementById('topSearch'), box = document.getElementById('topSearchResults');
+  inp.addEventListener('input', ()=>runTopSearch(inp.value));
+  inp.addEventListener('focus', ()=>runTopSearch(inp.value));
+  box.addEventListener('click', e=>{
+    const b = e.target.closest('[data-ts]'); if(!b) return;
+    const st = state.students.find(x=>x.id===b.dataset.ts); if(!st) return;
+    setPaid(st.id, acc.month, !isPaid(st,acc.month));
+    runTopSearch(inp.value); render();
+  });
+  document.addEventListener('click', e=>{ if(!e.target.closest('.tsearch')) box.style.display='none'; });
+})();
+
+/* ============================= FREE SLOTS SEARCH ============================= */
+const PAIRS = [['السبت','الثلاثاء'],['الأحد','الأربعاء'],['الاثنين','الخميس']];
+let freeRange = {from:8, to:22};
+function toMin(t){ const [h,m]=(t||'0:0').split(':').map(Number); return h*60+m; }
+/* الحصة بتاخد ساعة؛ الوقت مشغول لو في حصة عليها مجموعة بتتداخل معاه */
+function busyAt(day, tmin){
+  return (state.schedule[day]||[]).some(s=>s.groupId && Math.abs(toMin(s.time)-tmin)<60);
+}
+function freedAt(day, tmin){
+  return (state.freed||[]).find(f=>f.day===day && Math.abs(toMin(f.time)-tmin)<60);
+}
+function vacateSlot(day,id){
+  const slot=(state.schedule[day]||[]).find(s=>s.id===id);
+  if(!slot) return;
+  state.schedule[day]=state.schedule[day].filter(s=>s.id!==id);
+  if(!state.freed) state.freed=[];
+  state.freed.push({id:slot.id, day, time:slot.time, groupId:slot.groupId||null});
+}
+function setFreeRange(){
+  freeRange.from = parseInt(document.getElementById('freeFrom').value);
+  freeRange.to = parseInt(document.getElementById('freeTo').value);
+  render();
+}
+function hourLabel(h){ return to12h(String(h).padStart(2,'0')+':00'); }
+function dayFreeHtml(day){
+  const periods = [
+    {l:'☀️ صباحاً', test:h=>h<12},
+    {l:'🌤️ ظهراً وعصراً', test:h=>h>=12 && h<17},
+    {l:'🌙 مساءً وليلاً', test:h=>h>=17},
+  ];
+  const hours=[];
+  for(let h=freeRange.from; h<=freeRange.to; h++) if(!busyAt(day,h*60)) hours.push(h);
+  const body = periods.map(p=>{
+    const hs = hours.filter(p.test);
+    if(!hs.length) return '';
+    return `<div class="free-period"><div class="pl">${p.l}</div><div class="chips">${hs.map(h=>{
+      const fv = freedAt(day,h*60);
+      return `<button class="chip ${fv?'fromvac':''}" data-book="${day}|${h}" title="دوس لحجزه">${hourLabel(h)}${fv?' 🔴':''}</button>`;
+    }).join('')}</div></div>`;
+  }).join('');
+  return `<div><h4 style="margin:0 0 10px;font-size:16px;font-weight:900;color:var(--gold);">${escapeHtml(day)} <span style="color:var(--muted);font-size:12px;">(${hours.length} ساعة فاضية)</span></h4>${body || '<div class="empty-note">مفيش مواعيد فاضية.</div>'}</div>`;
+}
+function renderFree(){
+  const hourOpts = (sel)=>Array.from({length:17},(_,i)=>i+7).map(h=>`<option value="${h}" ${h===sel?'selected':''}>${hourLabel(h)}</option>`).join('');
+  const pairsHtml = PAIRS.map(([d1,d2])=>`
+    <div class="panel free-pair">
+      <h3>${d1} + ${d2}</h3>
+      <div class="free-cols">${dayFreeHtml(d1)}${dayFreeHtml(d2)}</div>
+    </div>`).join('');
+  const freed = state.freed||[];
+  const vacHtml = freed.length ? freed.map(f=>{
+    const g=groupById(f.groupId);
+    return `<div class="vac-item"><span>🔴 ${escapeHtml(f.day)} — ${to12h(f.time)}${g?' — كان: '+escapeHtml(g.name):''}</span>
+      <button class="btn small" data-restore="${f.id}">رجّع الحصة للجدول</button></div>`;
+  }).join('') : '<div class="empty-note">مفيش مواعيد اتخلت.</div>';
+  return `
+    <div class="topline">
+      <div><h2>بحث عن مواعيد</h2><div class="sub">السبت مع الثلاثاء، الأحد مع الأربعاء، الاثنين مع الخميس — كل يوم وفاضيه بشكل مستقل، واختار اللي يناسب الطلاب</div></div>
+    </div>
+    <div class="range-row">
+      <span style="font-weight:700;color:var(--muted);">من</span><select id="freeFrom" onchange="setFreeRange()">${hourOpts(freeRange.from)}</select>
+      <span style="font-weight:700;color:var(--muted);">إلى</span><select id="freeTo" onchange="setFreeRange()">${hourOpts(freeRange.to)}</select>
+      <span style="font-size:12.5px;color:var(--muted);">🟢 فاضي من الأصل &nbsp; 🔴 ميعاد اتخلى — دوس على أي ميعاد عشان تحجزه</span>
+    </div>
+    ${pairsHtml}
+    <div class="panel"><div class="section-title" style="margin-top:0;">المواعيد اللي اتخلت (اتنقلت من الجدول)</div><div class="vac-list">${vacHtml}</div></div>
+  `;
+}
+function openBook(day,h){
+  const time = String(h).padStart(2,'0')+':00';
+  openModal(`
+    <h3>حجز ${hourLabel(h)}</h3>
+    <p style="margin:0 0 14px;font-weight:700;">${escapeHtml(day)}</p>
+    <label class="tiny">المجموعة</label>
+    <select id="bookGroup" style="width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:inherit;font-weight:700;">
+      ${state.groups.map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('')}
+    </select>
+    <div class="row"><button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn gold" id="confirmBook">احجز</button></div>`);
+  document.getElementById('confirmBook').onclick = ()=>{
+    const gid = document.getElementById('bookGroup').value;
+    if(!gid) return;
+    if(!state.schedule[day]) state.schedule[day]=[];
+    if(!state.days.includes(day)) state.days.push(day);
+    state.schedule[day].push({id:uid(), time, groupId:gid});
+    state.freed = (state.freed||[]).filter(f=>!(f.day===day && Math.abs(toMin(f.time)-h*60)<60));
+    save(); closeModal(); render();
+  };
+}
+
+/* ============================= GROUPS ============================= */
+function renderGroups(){
+  return `
+    <div class="topline">
+      <div><h2>المجموعات والطلاب</h2><div class="sub">إدارة سهلة لجميع فرقك التدريسية</div></div>
+    </div>
+    <div class="panel">
+      <div class="section-title" style="margin-top:0;">مجموعة جديدة</div>
+      <div class="new-group-form">
+        <input type="text" id="newGroupName" placeholder="اسم المجموعة (مثال: الصف الأول الثانوي)">
+        <input type="color" id="newGroupColor" value="${PALETTE[state.groups.length % PALETTE.length]}">
+        <button class="btn gold" id="addGroupBtn">+ إنشاء مجموعة</button>
+      </div>
+      <div class="divider"></div>
+      <div class="groups-wrap">
+        ${state.groups.map(g=>{
+          const sts = studentsOf(g.id);
+          return `<div class="group-card" style="border-top-color:${g.color}">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <h4>${escapeHtml(g.name)}</h4>
+              <button class="icon-x" data-del-group="${g.id}" title="حذف المجموعة">✕</button>
+            </div>
+            <div class="cnt">${sts.length} طلاب مسجلين</div>
+            <div style="display:flex;gap:8px;margin-top:16px;">
+              <button class="btn small ghost" data-open-group="${g.id}" style="border:1px solid var(--border-strong);">إدارة الطلاب</button>
+              <button class="btn small ghost" data-rename-group="${g.id}">تعديل</button>
+            </div>
+          </div>`;
+        }).join('') || `<div class="empty-note">لا توجد أي مجموعات حالياً.</div>`}
+      </div>
+    </div>
+  `;
+}
+
+function openGroupDetail(gid){
+  const g = groupById(gid);
+  if(!g) return;
+  const sts = studentsOf(gid);
+  openModal(`
+    <h3 style="display:flex;align-items:center;gap:10px;"><span class="dot" style="background:${g.color};width:14px;height:14px;"></span>${escapeHtml(g.name)}</h3>
+    <div style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:16px;padding-right:4px;">
+      ${sts.length ? sts.map(s=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface-2);padding:10px 14px;border-radius:10px;border:1px solid var(--border);">
+          <span style="font-size:14.5px;font-weight:700;color:var(--cream);">${escapeHtml(s.name)}</span>
+          <span style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:12px;font-weight:700;color:var(--muted);">${paidCount(s)}/${MONTHS.length} مدفوع</span>
+            <button class="icon-x" data-del-student-modal="${s.id}">✕</button>
+          </span>
+        </div>`).join('') : `<div class="empty-note">المجموعة فارغة.</div>`}
+    </div>
+    <div style="display:flex;gap:10px;">
+      <input type="text" id="modalNewStudent" placeholder="اسم الطالب الجديد" style="flex:1;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:500;">
+      <button class="btn gold small" id="modalAddStudentBtn" data-group="${gid}" style="font-size:14px;">+ إضافة</button>
+    </div>
+    <div class="row"><button class="btn ghost" onclick="closeModal()">إغلاق النافذة</button></div>
+  `);
+  document.getElementById('modalAddStudentBtn').onclick = ()=>{
+    const inp = document.getElementById('modalNewStudent');
+    const name = inp.value.trim();
+    if(!name) return;
+    state.students.push({id:uid(), groupId:gid, name, payments:{}});
+    save();
+    openGroupDetail(gid);
+  };
+  document.querySelectorAll('[data-del-student-modal]').forEach(b=>{
+    b.onclick = ()=>{
+      const sid = b.dataset.delStudentModal;
+      confirmAction('هل تريد حذف هذا الطالب بشكل نهائي؟ سيتم مسح سجل الدفع الخاص به.', ()=>{
+        state.students = state.students.filter(s=>s.id!==sid);
+        save();
+        openGroupDetail(gid);
+      });
+    };
+  });
+}
+
+/* ============================= LEDGER ============================= */
+function renderLedger(){
+  const groupOptions = state.groups.map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('');
+  return `
+    <div class="topline">
+      <div><h2>كشف الدفع والمتابعة</h2><div class="sub">سجل مالي رقمي ينظم مستحقاتك بكل وضوح</div></div>
+    </div>
+    <div class="ledger-controls">
+      <select id="ledgerGroupSelect">
+        <option value="">— حدد المجموعة لعرض الكشف —</option>
+        ${groupOptions}
+      </select>
+      <div class="add-student-form" style="margin:0;">
+        <input type="text" id="ledgerNewStudent" placeholder="اسم طالب سريع للمجموعة">
+        <button class="btn gold small" id="ledgerAddStudentBtn">+ إضافة للكشف</button>
+      </div>
+    </div>
+    <div id="ledgerTableHolder"><div class="empty-note" style="padding:20px;">الرجاء اختيار مجموعة من القائمة بالأعلى.</div></div>
+  `;
+}
+
+function renderLedgerTable(gid){
+  const holder = document.getElementById('ledgerTableHolder');
+  if(!gid){ holder.innerHTML = `<div class="empty-note" style="padding:20px;">الرجاء اختيار مجموعة من القائمة بالأعلى.</div>`; return; }
+  const sts = studentsOf(gid).slice().sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  if(!sts.length){ holder.innerHTML = `<div class="empty-note" style="padding:20px;">هذه المجموعة لا تحتوي على طلاب بعد.</div>`; return; }
+  holder.innerHTML = `
+    <div class="table-wrap">
+      <table class="ledger">
+        <thead>
+          <tr>
+            <th class="name-th">الاسم</th>
+            ${MONTHS.map(m=>`<th>${m.l.split(' ')[0]}</th>`).join('')}
+            <th>الإجمالي</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sts.map(s=>`
+            <tr>
+              <td class="name-cell">${escapeHtml(s.name)}</td>
+              ${MONTHS.map(m=>{
+                const paid = !!(s.payments && s.payments[m.k]);
+                return `<td><button class="stamp-btn ${paid?'paid':''}" data-toggle-pay="${s.id}|${m.k}">${paid?'✓':''}</button></td>`;
+              }).join('')}
+              <td style="color:var(--muted);font-size:13px;font-weight:700;">${paidCount(s)}/${MONTHS.length}</td>
+              <td><button class="icon-x" data-del-student="${s.id}">✕</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  holder.querySelectorAll('[data-toggle-pay]').forEach(b=>{
+    b.onclick = ()=>{
+      const [sid, mk] = b.dataset.togglePay.split('|');
+      const st = state.students.find(x=>x.id===sid);
+      setPaid(sid, mk, !(st.payments && st.payments[mk]));
+      renderLedgerTable(gid);
+    };
+  });
+  holder.querySelectorAll('[data-del-student]').forEach(b=>{
+    b.onclick = ()=>{
+      confirmAction('حذف الطالب من هذه المجموعة؟', ()=>{
+        state.students = state.students.filter(s=>s.id!==b.dataset.delStudent);
+        save();
+        renderLedgerTable(gid);
+      });
+    };
+  });
+}
+
+/* ============================= SEARCH ============================= */
+function renderSearch(){
+  return `
+    <div class="topline">
+      <div><h2>البحث الموحد</h2><div class="sub">ابحث عن أي طالب في أي مجموعة بضغطة زر</div></div>
+    </div>
+    <div class="panel" style="padding:30px;">
+      <input type="text" id="globalSearchInput" placeholder="اكتب اسم الطالب للبحث السريع..." style="width:100%;background:var(--surface-2);border:2px solid var(--border-strong);color:var(--cream);border-radius:12px;padding:16px 20px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:16px;font-weight:500;box-shadow:inset 0 2px 4px rgba(0,0,0,0.02);">
+      <div class="search-results" id="globalSearchResults"></div>
+    </div>
+  `;
+}
+function runGlobalSearch(q){
+  const box = document.getElementById('globalSearchResults');
+  q = q.trim();
+  if(!q){ box.innerHTML=''; return; }
+  const results = state.students.filter(s=>s.name.includes(q));
+  if(!results.length){ box.innerHTML = `<div class="empty-note" style="margin-top:20px;">لم نعثر على أي طالب يحتوي اسمه على "${escapeHtml(q)}".</div>`; return; }
+  box.innerHTML = results.map(s=>{
+    const g = groupById(s.groupId);
+    return `<div class="sr-row">
+      <div class="who">
+        <span class="dot" style="background:${g?g.color:'#94A3B8'};width:12px;height:12px;"></span>
+        <b>${escapeHtml(s.name)}</b>
+        <span class="grp-tag" style="background:${g?g.color+'20':''};color:${g?g.color:''}">${g?escapeHtml(g.name):'غير مصنف'}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="prog">${paidCount(s)}/${MONTHS.length} شهور مدفوعة</span>
+        <button class="btn small gold" data-jump="${s.groupId}">تفاصيل الدفع</button>
+      </div>
+    </div>`;
+  }).join('');
+  box.querySelectorAll('[data-jump]').forEach(b=>{
+    b.onclick = ()=> goLedger(b.dataset.jump);
+  });
+}
+
+/* ============================= SETTINGS ============================= */
+function renderSettings(){
+  return `
+    <div class="topline">
+      <div><h2>الإعدادات والتخصيص</h2><div class="sub">إدارة الهوية والنسخ الاحتياطية — حالة الاتصال: <span id="syncStatusText2" style="font-weight:700;"></span></div></div>
+    </div>
+    <div class="panel">
+      <label class="tiny">اسم الواجهة الرئيسي (العلامة التجارية)</label>
+      <div style="display:flex;gap:12px;max-width:440px;margin-bottom:18px;">
+        <input type="text" id="teacherNameInput" value="${escapeHtml(state.teacherName)}" style="flex:1;background:var(--surface-2);border:1px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:700;">
+      </div>
+      <label class="tiny">الاسم الثانوي بالإنجليزية (يظهر بأحرف صغيرة في الرئيسية)</label>
+      <div style="display:flex;gap:12px;max-width:440px;margin-bottom:22px;">
+        <input type="text" id="teacherNameEnInput" value="${escapeHtml(state.teacherNameEn||'')}" style="flex:1;background:var(--surface-2);border:1px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;direction:ltr;text-align:right;font-weight:700;">
+      </div>
+      <button class="btn gold" id="saveNameBtn" style="margin-bottom:26px;">تحديث الهوية</button>
+      
+      <div class="divider"></div>
+      
+      <div class="section-title">إدارة البيانات اليدوية</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.6;">التطبيق يعمل بالكامل بدون إنترنت ويحفظ كل شيء فوراً على جهازك، ويتزامن تلقائياً مع قاعدة بيانات <strong>Supabase</strong> في الخلفية كلما توفر الاتصال. يمكنك أيضاً تحميل نسخة يدوية على جهازك للاحتياط.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn ghost" id="exportBtn" style="border:1px solid var(--border-strong);">⬇️ تصدير JSON</button>
+        <label class="btn ghost" style="border:1px solid var(--border-strong);cursor:pointer;">⬆️ استيراد نسخة
+          <input type="file" id="importFile" accept="application/json" style="display:none;">
+        </label>
+        <button class="btn danger" id="resetBtn" style="margin-right:auto;">🗑️ فرمتة التطبيق بالكامل</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================= EVENT WIRING ============================= */
+function attachHandlers(){
+  document.querySelectorAll('[data-add-slot]').forEach(b=>{
+    b.onclick = ()=>{
+      const [day, idx] = b.dataset.addSlot.split('|');
+      const time = readTimeSelectors('newTime-'+idx);
+      const gid = document.getElementById('newGroup-'+idx).value;
+      if(!state.schedule[day]) state.schedule[day]=[];
+      state.schedule[day].push({id:uid(), time, groupId: gid||null});
+      save(); render();
+    };
+  });
+  document.querySelectorAll('[data-del-slot]').forEach(b=>{
+    b.onclick = ()=>{
+      const [day, id] = b.dataset.delSlot.split('|');
+      state.schedule[day] = state.schedule[day].filter(s=>s.id!==id);
+      save(); render();
+    };
+  });
+  document.querySelectorAll('[data-acc-month]').forEach(b=> b.onclick=()=>{ acc.month=b.dataset.accMonth; render(); });
+  document.querySelectorAll('[data-acc-group]').forEach(b=> b.onclick=()=>{ acc.group=b.dataset.accGroup; render(); });
+  document.querySelectorAll('[data-acc-view]').forEach(b=> b.onclick=()=>{ acc.view=b.dataset.accView; render(); });
+  document.querySelectorAll('[data-acc-pay]').forEach(b=> b.onclick=()=>{
+    const sid=b.dataset.accPay, mk=acc.month, st=state.students.find(x=>x.id===sid);
+    setPaid(sid,mk,true); render();
+    showToast('✓ '+escapeHtml(st.name)+' اتحسب دفع', ()=>{ setPaid(sid,mk,false); render(); });
+  });
+  document.querySelectorAll('[data-acc-unpay]').forEach(b=> b.onclick=()=>{
+    const sid=b.dataset.accUnpay, mk=acc.month, st=state.students.find(x=>x.id===sid);
+    setPaid(sid,mk,false); render();
+    showToast('↩ '+escapeHtml(st.name)+' رجع لسه ما دفعش', ()=>{ setPaid(sid,mk,true); render(); });
+  });
+  const mc = document.querySelector('.mchip.active');
+  if(mc && mc.scrollIntoView && activeTab==='unpaid') mc.scrollIntoView({inline:'center',block:'nearest'});
+  document.querySelectorAll('[data-price]').forEach(inp=> inp.onchange=()=>{
+    const st=state.students.find(x=>x.id===inp.dataset.price); if(!st) return;
+    const v = inp.value.trim();
+    if(v===''||isNaN(Number(v))) delete st.price; else st.price = Math.max(0,Number(v));
+    save();
+    const t=document.getElementById('pt-'+inp.dataset.pgroup); if(t) t.textContent = money(groupMonthly(inp.dataset.pgroup));
+  });
+  document.querySelectorAll('[data-bulk]').forEach(b=> b.onclick=()=>{
+    const gid=b.dataset.bulk, v=document.getElementById('bulk-'+gid).value.trim();
+    if(v===''||isNaN(Number(v))) return;
+    const n=Math.max(0,Number(v)), sts=studentsOf(gid);
+    const apply=()=>{ sts.forEach(s=>{ s.price=n; }); save(); render(); };
+    if(sts.some(s=>s.price!=null && s.price!==n)) confirmAction('في طلاب في المجموعة دي ليهم أسعار مختلفة. تطبيق '+money(n)+' هيغيّرها كلها. متأكد؟', apply);
+    else apply();
+  });
+  document.querySelectorAll('[data-book]').forEach(b=>{
+    b.onclick = ()=>{ const [d,h]=b.dataset.book.split('|'); openBook(d,parseInt(h)); };
+  });
+  document.querySelectorAll('[data-restore]').forEach(b=>{
+    b.onclick = ()=>{
+      const f=(state.freed||[]).find(x=>x.id===b.dataset.restore);
+      if(!f) return;
+      if(!state.schedule[f.day]) state.schedule[f.day]=[];
+      if(!state.days.includes(f.day)) state.days.push(f.day);
+      state.schedule[f.day].push({id:f.id,time:f.time,groupId:groupById(f.groupId)?f.groupId:null});
+      state.freed=state.freed.filter(x=>x.id!==f.id);
+      save(); render();
+    };
+  });
+  document.querySelectorAll('[data-vac-slot]').forEach(b=>{
+    b.onclick = (e)=>{
+      e.stopPropagation();
+      const [day, id] = b.dataset.vacSlot.split('|');
+      const slot = state.schedule[day].find(s=>s.id===id);
+      if(!slot) return;
+      slot.vacant = !slot.vacant;
+      save(); render();
+    };
+  });
+  document.querySelectorAll('[data-slot-group]').forEach(sel=>{
+    sel.onchange = ()=>{
+      const [day, id] = sel.dataset.slotGroup.split('|');
+      const slot = state.schedule[day].find(s=>s.id===id);
+      slot.groupId = sel.value || null;
+      save(); render();
+    };
+  });
+  document.querySelectorAll('[data-slot-time]').forEach(inp=>{
+    inp.onchange = ()=>{
+      const [day, id] = inp.dataset.slotTime.split('|');
+      const slot = state.schedule[day].find(s=>s.id===id);
+      slot.time = inp.value;
+      save(); render();
+    };
+  });
+  document.querySelectorAll('[data-edit-slot]').forEach(card=>{
+    card.addEventListener('click', (e)=>{
+      if(e.target.closest('button')) return; // زر الحذف له معالج مستقل
+      const [day, id] = card.dataset.editSlot.split('|');
+      const slot = state.schedule[day].find(s=>s.id===id);
+      if(!slot) return;
+      openModal(`
+        <h3>تعديل الحصة — ${escapeHtml(day)}</h3>
+        <label class="tiny">الساعة</label>
+        <div class="time-selectors" style="margin-bottom:16px;">${timeSelectorsHtml('editSlot', slot.time)}</div>
+        <label class="tiny">المجموعة</label>
+        <select id="editSlotGroup" style="width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:700;">
+          <option value="">— وقت فارغ —</option>
+          ${state.groups.map(g=>`<option value="${g.id}" ${g.id===slot.groupId?'selected':''}>${escapeHtml(g.name)}</option>`).join('')}
+        </select>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:16px;font-weight:700;color:#B91C1C;cursor:pointer;"><input type="checkbox" id="editSlotVacant" ${slot.vacant?'checked':''}> 🔴 الميعاد ده فاضي (المجموعة مبقتش تيجي) — هيتنقل للمواعيد الفاضية</label>
+        <div class="row">
+          <button class="btn ghost" onclick="closeModal()">إلغاء</button>
+          <button class="btn gold" id="confirmEditSlot">حفظ التعديل</button>
+        </div>`);
+      document.getElementById('confirmEditSlot').onclick = ()=>{
+        const t = readTimeSelectors('editSlot');
+        const gid = document.getElementById('editSlotGroup').value;
+        if(document.getElementById('editSlotVacant').checked){
+          confirmAction('هل أنت متأكد من نقل هذا الميعاد ('+escapeHtml(day)+' — '+to12h(slot.time)+') للمواعيد الفاضية؟ هيتشال من الجدول وهيظهر في «بحث عن مواعيد».', ()=>{
+            vacateSlot(day, slot.id); save(); render();
+          });
+          return;
+        }
+        if(t) slot.time = t;
+        slot.groupId = gid || null;
+        save(); closeModal(); render();
+      };
+    });
+  });
+  document.querySelectorAll('[data-move-day]').forEach(b=>{
+    b.onclick = ()=>{
+      const idx = parseInt(b.dataset.moveDay), dir = parseInt(b.dataset.dir);
+      const newIdx = idx+dir;
+      if(newIdx<0 || newIdx>=state.days.length) return;
+      [state.days[idx], state.days[newIdx]] = [state.days[newIdx], state.days[idx]];
+      save(); render();
+    };
+  });
+  document.querySelectorAll('[data-del-day]').forEach(b=>{
+    b.onclick = ()=>{
+      const day = b.dataset.delDay;
+      confirmAction(`هل أنت متأكد من حذف جدول يوم "${escapeHtml(day)}" بالكامل؟`, ()=>{
+        state.days = state.days.filter(d=>d!==day);
+        delete state.schedule[day];
+        save(); render();
+      });
+    };
+  });
+  const addDayBtn = document.getElementById('addDayBtn');
+  if(addDayBtn) addDayBtn.onclick = ()=>{
+    openModal(`
+      <h3>إضافة يوم جديد</h3>
+      <input type="text" id="newDayName" placeholder="مثال: ورشة العمل الإضافية" style="width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:500;">
+      <div class="row">
+        <button class="btn ghost" onclick="closeModal()">إلغاء</button>
+        <button class="btn gold" id="confirmAddDay">حفظ اليوم</button>
+      </div>`);
+    document.getElementById('confirmAddDay').onclick = ()=>{
+      const name = document.getElementById('newDayName').value.trim();
+      if(!name) return;
+      if(!state.days.includes(name)){ state.days.push(name); state.schedule[name]=[]; }
+      save(); closeModal(); render();
+    };
+  };
+
+  const addGroupBtn = document.getElementById('addGroupBtn');
+  if(addGroupBtn) addGroupBtn.onclick = ()=>{
+    const nameInp = document.getElementById('newGroupName');
+    const colorInp = document.getElementById('newGroupColor');
+    const name = nameInp.value.trim();
+    if(!name) return;
+    state.groups.push({id:uid(), name, color: colorInp.value});
+    save(); render();
+  };
+  document.querySelectorAll('[data-open-group]').forEach(b=> b.onclick = ()=> openGroupDetail(b.dataset.openGroup));
+  document.querySelectorAll('.group-card').forEach(card=>{
+    card.addEventListener('click', (e)=>{
+      if(e.target.closest('button')) return;
+      const gid = card.querySelector('[data-open-group]')?.dataset.openGroup || card.querySelector('[data-del-group]')?.dataset.delGroup;
+      if(gid) openGroupDetail(gid);
+    });
+  });
+  document.querySelectorAll('[data-del-group]').forEach(b=>{
+    b.onclick = (e)=>{
+      e.stopPropagation();
+      const gid = b.dataset.delGroup;
+      const g = groupById(gid);
+      confirmAction(`سيتم مسح مجموعة "${escapeHtml(g.name)}" وحذف كل طلابها من الكشوفات نهائياً. هل أنت متأكد؟`, ()=>{
+        state.students = state.students.filter(s=>s.groupId!==gid);
+        Object.keys(state.schedule).forEach(day=>{
+          state.schedule[day] = state.schedule[day].filter(s=>s.groupId!==gid);
+        });
+        state.groups = state.groups.filter(g2=>g2.id!==gid);
+        save(); render();
+      });
+    };
+  });
+  document.querySelectorAll('[data-rename-group]').forEach(b=>{
+    b.onclick = (e)=>{
+      e.stopPropagation();
+      const gid = b.dataset.renameGroup;
+      const g = groupById(gid);
+      openModal(`
+        <h3>إعدادات المجموعة</h3>
+        <label class="tiny">اسم المجموعة</label>
+        <input type="text" id="editGroupName" value="${escapeHtml(g.name)}" style="width:100%;margin-bottom:16px;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-weight:700;">
+        <label class="tiny">اللون المميز (يستخدم في الجدول والبحث)</label>
+        <input type="color" id="editGroupColor" value="${g.color}" style="width:50px;height:40px;border:none;background:none;cursor:pointer;">
+        <div class="row" style="margin-top:20px;">
+          <button class="btn ghost" onclick="closeModal()">تراجع</button>
+          <button class="btn gold" id="confirmEditGroup">تطبيق التعديلات</button>
+        </div>`);
+      document.getElementById('confirmEditGroup').onclick = ()=>{
+        const name = document.getElementById('editGroupName').value.trim();
+        const color = document.getElementById('editGroupColor').value;
+        if(name){ g.name=name; g.color=color; save(); closeModal(); render(); }
+      };
+    };
+  });
+
+  const ledgerSel = document.getElementById('ledgerGroupSelect');
+  if(ledgerSel) ledgerSel.onchange = ()=> renderLedgerTable(ledgerSel.value);
+  const ledgerAddBtn = document.getElementById('ledgerAddStudentBtn');
+  if(ledgerAddBtn) ledgerAddBtn.onclick = ()=>{
+    const gid = document.getElementById('ledgerGroupSelect').value;
+    const inp = document.getElementById('ledgerNewStudent');
+    const name = inp.value.trim();
+    if(!gid){ alert('يجب تحديد مجموعة أولاً لكي تضيف الطالب إليها.'); return; }
+    if(!name) return;
+    state.students.push({id:uid(), groupId:gid, name, payments:{}});
+    inp.value='';
+    save();
+    renderLedgerTable(gid);
+  };
+
+  const searchInp = document.getElementById('globalSearchInput');
+  if(searchInp) searchInp.oninput = ()=> runGlobalSearch(searchInp.value);
+
+  const saveNameBtn = document.getElementById('saveNameBtn');
+  if(saveNameBtn) saveNameBtn.onclick = ()=>{
+    const v = document.getElementById('teacherNameInput').value.trim();
+    const ve = document.getElementById('teacherNameEnInput').value.trim();
+    if(v) state.teacherName=v;
+    state.teacherNameEn = ve;
+    save(); render();
+  };
+  
+  const exportBtn = document.getElementById('exportBtn');
+  if(exportBtn) exportBtn.onclick = ()=>{
+    const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'نسخة-احتياطية-'+state.teacherName+'-'+new Date().toISOString().slice(0,10)+'.json';
+    a.click(); URL.revokeObjectURL(url);
+  };
+  const importFile = document.getElementById('importFile');
+  if(importFile) importFile.onchange = (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      try{
+        const parsed = JSON.parse(reader.result);
+        if(parsed.groups && parsed.days){
+          state = parsed; save(); render();
+          alert('تم استعادة البيانات السابقة بنجاح.');
+        } else alert('الملف غير متوافق.');
+      }catch(err){ alert('حدث خطأ أثناء قراءة الملف.'); }
+    };
+    reader.readAsText(file);
+  };
+  const resetBtn = document.getElementById('resetBtn');
+  if(resetBtn) resetBtn.onclick = ()=>{
+    confirmAction('تحذير خطير: سيتم مسح جدول الحصص والمجموعات وجميع الطلاب بالكامل ولن تتمكن من استرجاعهم. هل أنت متأكد؟', ()=>{
+      state = defaultState(); save(); render();
+    });
+  };
+}
+
+// تشغيل البرنامج والاتصال بـ Supabase
+initApp();
+</script>
+</body>
+</html>
