@@ -113,6 +113,33 @@ body{
 
 .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block;}
 /* ---------- Schedule table (جدول أسبوعي احترافي بنمط الأعمدة المتوازية) ---------- */
+
+/* ---------- بانر "النهارده" الذكي ---------- */
+.today-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:14px;margin-bottom:14px;}
+.today-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.today-title{font-size:19px;font-weight:900;color:var(--cream);}
+.today-title small{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-top:2px;}
+.today-next{background:var(--gold-soft);color:var(--gold);border-radius:12px;padding:6px 12px;font-weight:800;font-size:13px;}
+.day-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;}
+.day-chip{flex:0 0 auto;border:1px solid var(--border-strong);background:var(--surface-2);color:var(--cream);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;}
+.day-chip.sel{background:var(--gold);color:#fff;border-color:var(--gold);}
+.day-chip.is-today:not(.sel){border-color:#F59E0B;color:#B45309;}
+.tl-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid var(--border);border-inline-start:6px solid #94A3B8;background:var(--surface-2);margin-bottom:8px;}
+.tl-row .tl-time{font-weight:900;font-size:15px;min-width:76px;color:var(--cream);}
+.tl-row .tl-name{font-weight:800;flex:1;}
+.tl-row .tl-st{font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap;}
+.tl-row.done{opacity:.45;}
+.tl-row.done .tl-st{background:#E2E8F0;color:#475569;}
+.tl-row.now{box-shadow:0 0 0 2px #EF4444;background:#FEF2F2;}
+.tl-row.now .tl-st{background:#EF4444;color:#fff;}
+.tl-row.next{box-shadow:0 0 0 2px var(--gold);background:var(--gold-soft);}
+.tl-row.next .tl-st{background:var(--gold);color:#fff;}
+.tl-row.later .tl-st{background:#E2E8F0;color:#475569;}
+.today-empty{text-align:center;color:var(--muted);font-weight:700;padding:14px 6px;}
+.day-col.today{background:rgba(245,158,11,.06);}
+.day-col.today .day-col-head{outline:3px solid #F59E0B;outline-offset:-3px;}
+.today-badge{display:inline-block;background:#F59E0B;color:#fff;border-radius:999px;font-size:11px;padding:1px 8px;margin-inline-start:6px;vertical-align:middle;}
+@media print{.today-card{display:none;}}
 .schedule-table-wrap{
   border:1px solid var(--border);border-radius:16px;overflow:hidden;
   box-shadow:var(--shadow);background:var(--surface);
@@ -401,39 +428,99 @@ label.tiny{font-size:13px;font-weight:700;color:var(--muted);display:block;margi
   .free-cols > div:first-child{padding-inline-end:8px;}
   .acc-row{padding:11px 12px;}
 }
+/* ---------- Dock (bottom nav) ---------- */
+.tb-brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.tb-stamp{width:38px;height:38px;border:2px solid var(--gold);background:var(--gold-soft);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:var(--gold);transform:rotate(-3deg);}
+.tb-txt{display:flex;flex-direction:column;line-height:1.35;}
+.tb-txt b{font-size:14px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tb-txt small{font-size:10.5px;color:var(--muted);}
+.main{padding-bottom:130px !important;}
+.dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(620px,calc(100% - 20px));z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:26px;box-shadow:0 12px 40px rgba(15,23,42,.18);}
+.dock button{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px 7px;border:none;background:transparent;border-radius:18px;cursor:pointer;font-family:inherit;color:var(--muted);transition:background .2s,transform .15s;}
+.dock button:active{transform:scale(.94);}
+.dock .ic,.more-grid .ic{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;background:linear-gradient(135deg,var(--g1),var(--g2));box-shadow:0 4px 12px rgba(0,0,0,.14);transition:transform .2s;}
+.dock .lb{font-size:10.5px;font-weight:700;white-space:nowrap;}
+.dock button.active{background:var(--gold-soft);color:var(--cream);}
+.dock button.active .ic{transform:translateY(-4px) scale(1.1);}
+.dock button.active .lb{font-weight:900;}
+.dock .nav-badge{position:absolute;top:2px;left:50%;margin:0 0 0 12px;margin-inline-start:0;transform:translateX(8px);font-size:10.5px;padding:0 6px;border:2px solid #fff;}
+.more-sheet{display:none;position:fixed;bottom:104px;left:50%;transform:translateX(-50%);width:min(560px,calc(100% - 20px));z-index:79;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:0 20px 50px rgba(15,23,42,.25);padding:16px;}
+.more-sheet.show{display:block;animation:sheetup .18s ease;}
+@keyframes sheetup{from{opacity:0;transform:translate(-50%,12px);}to{opacity:1;transform:translate(-50%,0);}}
+.more-title{font-weight:900;font-size:13px;color:var(--muted);margin-bottom:12px;}
+.more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.more-grid button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px;border:1px solid var(--border);background:var(--surface-2);border-radius:18px;cursor:pointer;font-family:inherit;font-weight:700;font-size:12.5px;color:var(--cream);}
+.more-grid button:hover,.more-grid button.active{border-color:var(--gold);background:var(--gold-soft);}
+.more-grid .ic{width:48px;height:48px;font-size:25px;}
+#toast{bottom:110px !important;}
+.overlay{z-index:78;background:rgba(15,23,42,.25);}
+@media (max-width:600px){.tb-txt small{display:none;}.tb-txt b{max-width:80px;}.dock .lb{font-size:9.8px;}.dock .ic{width:38px;height:38px;font-size:20px;}}
+@media print{.dock,.more-sheet{display:none !important;}}
+/* ---------- Stats ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);}
+.kpi .k{font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.kpi .v{font-size:26px;font-weight:900;line-height:1.2;}
+.kpi .d{font-size:12px;font-weight:700;margin-top:6px;color:var(--muted);}
+.kpi.main-kpi{background:linear-gradient(135deg,#059669,#10B981);color:#fff;border:none;}
+.kpi.main-kpi .k,.kpi.main-kpi .d{color:rgba(255,255,255,.88);}
+.pbar{height:10px;border-radius:6px;background:var(--surface-3);overflow:hidden;}
+.pbar > i{display:block;height:100%;background:var(--paid);border-radius:6px;}
+.gstat{display:grid;grid-template-columns:minmax(110px,1.2fr) 2fr auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--border);font-size:13.5px;}
+.gstat:first-of-type{border-top:none;}
+.gstat .nm{font-weight:900;display:flex;align-items:center;gap:7px;}
+.yr{display:flex;align-items:flex-end;gap:6px;height:170px;padding-top:10px;}
+.yr-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;cursor:pointer;min-width:0;}
+.yr-bar{width:100%;max-width:34px;border-radius:7px 7px 3px 3px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;background:#FCA5A5;min-height:3px;}
+.yr-bar i{display:block;background:var(--paid);}
+.yr-col.sel .yr-bar{outline:3px solid var(--gold);outline-offset:2px;}
+.yr-lbl{font-size:10px;font-weight:700;color:var(--muted);margin-top:6px;white-space:nowrap;}
+.yr-col.sel .yr-lbl{color:var(--gold);font-weight:900;}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;font-weight:700;color:var(--muted);margin-top:10px;}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px;}
+.lockbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;border-radius:12px;padding:11px 16px;font-weight:700;font-size:14px;margin-bottom:14px;}
+.rm-opt{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px;}
+.rm-opt.danger{border-color:#FCA5A5;background:rgba(239,68,68,.04);}
+.rm-opt select{background:var(--surface);border:1px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:9px 12px;font-family:inherit;font-weight:700;}
+.sg-row{display:flex;flex-wrap:wrap;gap:10px;}
+.sg{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--paid);background:rgba(16,185,129,.08);color:#047857;border-radius:14px;padding:10px 14px;font-family:inherit;cursor:pointer;font-weight:900;font-size:15px;transition:transform .12s;}
+.sg:hover{background:var(--paid);color:#fff;}
+.sg:active{transform:scale(.96);}
+.sg.top{border-color:#F59E0B;background:linear-gradient(135deg,#FEF3C7,#FDE68A);color:#92400E;}
+.sg.top:hover{background:#F59E0B;color:#fff;}
+.sg-i{font-size:13px;letter-spacing:1px;}
+.sg-d{font-size:11.5px;font-weight:700;opacity:.8;}
+.best-panel{background:linear-gradient(135deg,#FFFBEB,#fff);border-color:#FCD34D;margin-bottom:16px;}
+.hm-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.hm{display:grid;grid-template-columns:30px repeat(7,minmax(0,1fr));gap:3px;}
+.hm-h{font-size:10.5px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:flex-end;padding-inline-end:4px;white-space:nowrap;}
+.hm-d{font-size:11px;font-weight:900;text-align:center;padding:4px 0;color:var(--cream);}
+.hm-c{height:32px;border-radius:7px;font-size:8.5px;font-weight:700;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 3px;border:none;font-family:inherit;}
+.hm-c.free{background:#D1FAE5;border:1px solid #6EE7B7;color:#059669;cursor:pointer;font-size:13px;}
+.hm-c.free:hover{background:#10B981;color:#fff;}
+.hm-c.free.fv{background:#FEE2E2;border:1px dashed #EF4444;}
+.hm-sep{margin-inline-start:5px;}
+.hm-d{font-size:10px !important;}
+.pair-card{margin-bottom:16px;border-top:4px solid var(--pc);}
+.pair-card h3{font-family:'Amiri','Segoe UI',Tahoma,Georgia,serif;font-size:21px;margin:0 0 16px;display:flex;align-items:center;gap:10px;}
+.pair-dot{width:12px;height:12px;border-radius:50%;background:var(--pc);flex-shrink:0;}
+.pair-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pair-cols.single{grid-template-columns:1fr;}
+.day-free{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:12px;min-width:0;}
+.day-free-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:15px;}
+.day-free-head .cnt{background:var(--pc);color:#fff;border-radius:10px;padding:1px 9px;font-size:12px;font-weight:900;}
+.day-free .chip{padding:7px 10px;font-size:13px;}
+.day-free .free-period{margin-bottom:10px;}
+@media (max-width:600px){.day-free{padding:10px 8px;}.day-free .chip{padding:6px 8px;font-size:12.5px;}.pair-cols{gap:8px;}}
 </style>
 </head>
 <body>
 
 <div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="stamp">OX</div>
-      <h1 id="teacherNameDisp">Oxford</h1>
-      <p>تطبيق إدارة الجدول والطلاب</p>
-    </div>
-    <nav class="nav" id="nav">
-      <div class="nav-title">الشغل اليومي</div>
-      <button data-tab="schedule" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>الجدول الأسبوعي</button>
-      <button data-tab="free"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>بحث عن مواعيد</button>
-      <div class="nav-title">الحسابات</div>
-      <button data-tab="unpaid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>لسه ما دفعوش<span class="nav-badge" id="unpaidBadge"></span></button>
-      <button data-tab="prices"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>الأسعار</button>
-      <button data-tab="ledger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6l1 3H8l1-3z"/><path d="M6 6h12v15H6z"/><path d="m9.5 12 1.8 1.8L15 10"/></svg>كشف الدفع (السنة)</button>
-      <div class="nav-title">الإدارة</div>
-      <button data-tab="groups"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M15.5 13.2c2.7.3 4.8 2.4 5 6.3"/></svg>المجموعات والطلاب</button>
-      <button data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>نظرة عامة</button>
-      <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>الإعدادات السحابية</button>
-    </nav>
-    <div class="sidebar-foot">
-      يعمل التطبيق دائماً بدون إنترنت، ويتزامن مع السحابة تلقائياً عند توفر الاتصال.<br>
-      <span id="syncStatusText" style="font-weight:700;">📴 جاري العمل محلياً</span>
-    </div>
-  </aside>
   <div class="overlay" id="overlay"></div>
   <div class="content">
     <header class="topbar">
-      <button class="menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
+      <div class="tb-brand"><div class="tb-stamp">OX</div><div class="tb-txt"><b id="teacherNameDisp">Oxford</b><small id="syncStatusText">📴 جاري العمل محلياً</small></div></div>
       <div class="tsearch">
         <input id="topSearch" type="search" placeholder="🔎 دوّر على طالب بالاسم..." autocomplete="off">
         <div class="tsearch-results" id="topSearchResults"></div>
@@ -443,6 +530,25 @@ label.tiny{font-size:13px;font-weight:700;color:var(--muted);display:block;margi
     <main class="main" id="main"></main>
   </div>
 </div>
+
+<div class="more-sheet" id="moreSheet">
+  <div class="more-title">باقي الأقسام</div>
+  <div class="more-grid">
+    <button data-tab="prices"><span class="ic" style="--g1:#F59E0B;--g2:#F97316">🏷️</span>الأسعار</button>
+    <button data-tab="ledger"><span class="ic" style="--g1:#14B8A6;--g2:#0D9488">📒</span>كشف السنة</button>
+    <button data-tab="groups"><span class="ic" style="--g1:#EC4899;--g2:#DB2777">👥</span>المجموعات والطلاب</button>
+    <button data-tab="home"><span class="ic" style="--g1:#38BDF8;--g2:#0284C7">🏠</span>نظرة عامة</button>
+    <button data-tab="settings"><span class="ic" style="--g1:#94A3B8;--g2:#64748B">⚙️</span>الإعدادات</button>
+  </div>
+</div>
+<nav class="dock" id="nav">
+  <button data-tab="schedule" class="active"><span class="ic" style="--g1:#38BDF8;--g2:#0284C7">📅</span><span class="lb">الجدول</span></button>
+  <button data-tab="free"><span class="ic" style="--g1:#A78BFA;--g2:#7C3AED">🔍</span><span class="lb">مواعيد فاضية</span></button>
+  <button data-tab="unpaid"><span class="ic" style="--g1:#FB7185;--g2:#EF4444">💸</span><span class="lb">لسه ما دفعوش</span><span class="nav-badge" id="unpaidBadge"></span></button>
+  <button data-tab="stats"><span class="ic" style="--g1:#34D399;--g2:#059669">📊</span><span class="lb">إحصائيات</span></button>
+  <button data-tab="more" id="moreBtn"><span class="ic" style="--g1:#FBBF24;--g2:#F59E0B">✨</span><span class="lb">المزيد</span></button>
+</nav>
+
 
 <div class="modal-bg" id="modalBg">
   <div class="modal" id="modalBox"></div>
@@ -561,6 +667,7 @@ function defaultState(){
 function migrateState(){
   if(!state) return;
   if(!Array.isArray(state.freed)) state.freed = [];
+  if(!state.closed || typeof state.closed!=='object' || Array.isArray(state.closed)) state.closed = {};
   Object.keys(state.schedule||{}).forEach(day=>{
     const keep=[];
     (state.schedule[day]||[]).forEach(sl=>{
@@ -708,18 +815,30 @@ function confirmAction(msg, onYes){
 
 /* ============================= NAV ============================= */
 let activeTab = 'schedule';
-function openDrawer(){ document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
-function closeDrawer(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
-document.getElementById('menuBtn').onclick = openDrawer;
-document.getElementById('overlay').onclick = closeDrawer;
+const MORE_TABS=['prices','ledger','groups','home','settings'];
+function closeMore(){ document.getElementById('moreSheet').classList.remove('show'); document.getElementById('overlay').classList.remove('show'); }
+function toggleMore(){
+  const sh=document.getElementById('moreSheet'), on=!sh.classList.contains('show');
+  sh.classList.toggle('show',on); document.getElementById('overlay').classList.toggle('show',on);
+}
+function setDockActive(){
+  document.querySelectorAll('#nav button').forEach(b=>{
+    const t=b.dataset.tab;
+    b.classList.toggle('active', t===activeTab || (t==='more' && MORE_TABS.includes(activeTab)));
+  });
+  document.querySelectorAll('#moreSheet button').forEach(b=>b.classList.toggle('active',b.dataset.tab===activeTab));
+}
+function goTab(t){
+  activeTab=t; closeMore(); render(); window.scrollTo(0,0);
+}
+document.getElementById('overlay').onclick = closeMore;
 document.getElementById('nav').addEventListener('click', e=>{
-  const btn = e.target.closest('button[data-tab]');
-  if(!btn) return;
-  activeTab = btn.dataset.tab;
-  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active', b===btn));
-  closeDrawer();
-  render();
-  window.scrollTo(0,0);
+  const btn=e.target.closest('button[data-tab]'); if(!btn) return;
+  if(btn.dataset.tab==='more'){ toggleMore(); return; }
+  goTab(btn.dataset.tab);
+});
+document.getElementById('moreSheet').addEventListener('click', e=>{
+  const btn=e.target.closest('button[data-tab]'); if(btn) goTab(btn.dataset.tab);
 });
 
 /* ============================= RENDER ROUTER ============================= */
@@ -735,12 +854,21 @@ function render(){
   else if(activeTab==='ledger') main.innerHTML = renderLedger();
   else if(activeTab==='unpaid') main.innerHTML = renderUnpaid();
   else if(activeTab==='prices') main.innerHTML = renderPrices();
+  else if(activeTab==='stats') main.innerHTML = renderStats();
   else if(activeTab==='settings') main.innerHTML = renderSettings();
   const bd = document.getElementById('unpaidBadge');
-  if(bd){ const n = state.students.filter(x=>!isPaid(x,acc.month)).length; bd.textContent = n||''; bd.style.display = n?'':'none'; }
+  if(bd){ const n = state.students.filter(x=>activeIn(x,acc.month)&&!isPaid(x,acc.month)).length; bd.textContent = n||''; bd.style.display = n?'':'none'; }
+  setDockActive();
   attachHandlers();
   setSyncStatus(syncStatus);
+  if(activeTab==='schedule' && !todayScrolled){
+    todayScrolled=true;
+    const col=document.querySelector('.day-col.today');
+    if(col) col.scrollIntoView({inline:'center',block:'nearest'}); // يوصّل الجدول الأفقي لعمود النهارده
+  }
 }
+// تحديث "دلوقتي/الجاية" كل دقيقة، ورجوع تلقائي لليوم الحالي لو اليوم اتغيّر
+setInterval(()=>{ if(state && activeTab==='schedule' && !document.getElementById('modalBg').classList.contains('show')){ const a=document.activeElement; if(!a||!/INPUT|SELECT|TEXTAREA/.test(a.tagName)) render(); } },60000);
 
 /* ============================= HOME ============================= */
 function renderHome(){
@@ -795,11 +923,84 @@ function goLedger(gid){
   setTimeout(()=>{ const sel=document.getElementById('ledgerGroupSelect'); if(sel){ sel.value=gid; sel.dispatchEvent(new Event('change')); } },0);
 }
 
+
+/* ============================= النهارده الذكي ============================= */
+let todayView = null;          // اليوم المعروض في البانر (الافتراضي: النهارده)
+let todayScrolled = false;     // السكرول التلقائي مرة واحدة بس عند فتح البرنامج
+const SLOT_LEN = 60;           // مدة الحصة بالدقايق
+function currentDayName(){ return DAY_NAMES_JS[new Date().getDay()]; }
+function setTodayView(d){ todayView = d; render(); }
+function nextSessionInfo(){
+  const now=new Date(), nowMin=now.getHours()*60+now.getMinutes();
+  const names=state.days||[];
+  for(let off=0; off<=7; off++){
+    const dn = DAY_NAMES_JS[(now.getDay()+off)%7];
+    if(!names.includes(dn)) continue;
+    const list=(state.schedule[dn]||[]).filter(s=>!s.vacant && s.groupId && (off>0 || toMin(s.time)+SLOT_LEN>nowMin))
+      .sort((a,b)=>toMin(a.time)-toMin(b.time));
+    if(list.length) return {day:dn, off, slot:list[0]};
+  }
+  return null;
+}
+function renderTodayCard(){
+  const now=new Date(), nowMin=now.getHours()*60+now.getMinutes();
+  const today=currentDayName();
+  const view = (todayView && state.days.includes(todayView)) ? todayView : today;
+  const isToday = view===today;
+  const slots=(state.schedule[view]||[]).slice().sort((a,b)=>a.time.localeCompare(b.time));
+  const real=slots.filter(s=>!s.vacant && s.groupId);
+  const dateTxt=now.toLocaleDateString('ar-EG',{day:'numeric',month:'long'});
+
+  // تحديد الحصة "دلوقتي" و"الجاية" (النهارده بس)
+  let nowId=null, nextId=null, headNote='';
+  if(isToday){
+    const cur=real.find(s=>toMin(s.time)<=nowMin && nowMin<toMin(s.time)+SLOT_LEN);
+    const nxt=real.find(s=>toMin(s.time)>nowMin);
+    if(cur) nowId=cur.id;
+    if(nxt){ nextId=nxt.id; const d=toMin(nxt.time)-nowMin; headNote='الحصة الجاية '+(d>=60?'بعد '+Math.floor(d/60)+' س'+(d%60?' و'+(d%60)+' د':''):'بعد '+d+' دقيقة'); }
+    else if(cur) headNote='فيه حصة شغّالة دلوقتي';
+    else if(real.length) headNote='خلصت حصص النهارده ✅';
+  }
+
+  const rows = slots.map(s=>{
+    const g=groupById(s.groupId), vac=!!s.vacant;
+    const color = vac?'#EF4444':(g?g.color:'#94A3B8');
+    let cls='later', st='';
+    if(isToday){
+      const t=toMin(s.time);
+      if(s.id===nowId){cls='now';st='🔴 دلوقتي';}
+      else if(s.id===nextId){cls='next';st='⏭️ الجاية';}
+      else if(t+SLOT_LEN<=nowMin){cls='done';st='✔ خلصت';}
+    }
+    const name = vac ? '🔴 فاضي' : (g?escapeHtml(g.name):'— وقت فارغ —');
+    return `<div class="tl-row ${cls}" style="border-inline-start-color:${color}">
+      <span class="tl-time">${to12h(s.time)}</span><span class="tl-name">${name}</span>${st?`<span class="tl-st">${st}</span>`:''}</div>`;
+  }).join('');
+
+  let empty='';
+  if(!slots.length){
+    const nx=nextSessionInfo();
+    empty=`<div class="today-empty">☕ ${isToday?'النهارده':'اليوم ده'} مفيش حصص${nx?`<br>أقرب حصة: <b>${nx.day}</b> الساعة <b>${to12h(nx.slot.time)}</b>`:''}</div>`;
+  }
+
+  const chips = state.days.map(d=>`<button class="day-chip ${d===view?'sel':''} ${d===today?'is-today':''}" onclick="setTodayView('${d}')">${d===today?'📍 ':''}${escapeHtml(d)}</button>`).join('');
+
+  return `<div class="today-card">
+    <div class="today-top">
+      <div class="today-title">${isToday?'📍 النهارده':'📅'} ${escapeHtml(view)}<small>${isToday?dateTxt+' — ':''}${real.length} حصة</small></div>
+      ${headNote?`<div class="today-next">${headNote}</div>`:''}
+    </div>
+    <div class="day-chips">${chips}</div>
+    ${rows||empty}
+  </div>`;
+}
+
 /* ============================= SCHEDULE ============================= */
 function renderSchedule(){
   const groupOptions = state.groups.map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('');
   const colCount = Math.max(state.days.length, 1);
   return `
+    ${renderTodayCard()}
     <div class="topline">
       <div><h2>الجدول الأسبوعي</h2><div class="sub">كل يوم في كارت، مرتب بالساعة، وكل حصة واضح فيها اسم المجموعة وأسماء طلابها</div></div>
       <div style="display:flex;gap:10px;">
@@ -814,9 +1015,9 @@ function renderSchedule(){
           ${state.days.map((day,idx)=>{
             const slots = (state.schedule[day]||[]).slice().sort((a,b)=>a.time.localeCompare(b.time));
             return `
-            <div class="day-col">
+            <div class="day-col ${day===currentDayName()?'today':''}" data-day="${escapeHtml(day)}">
               <div class="day-col-head">
-                <h3>${escapeHtml(day)}</h3>
+                <h3>${escapeHtml(day)}${day===currentDayName()?'<span class="today-badge">النهارده</span>':''}</h3>
                 <div class="day-col-actions">
                   <button data-move-day="${idx}" data-dir="-1" title="حرّك لليمين">←</button>
                   <button data-move-day="${idx}" data-dir="1" title="حرّك لليسار">→</button>
@@ -1050,6 +1251,7 @@ function isPaid(st,mk){ return !!(st.payments && st.payments[mk]); }
 function amountPaid(st,mk){ const a = st.amounts && st.amounts[mk]; return typeof a==='number' ? a : (st.price||0); }
 function setPaid(sid,mk,paid){
   const st = state.students.find(x=>x.id===sid); if(!st) return;
+  if(isClosed(mk)){ showToast('🔒 الشهر ده مقفول — افتحه الأول لو عاوز تعدّل'); return; }
   if(!st.payments) st.payments = {};
   if(!st.amounts) st.amounts = {};
   st.payments[mk] = !!paid;
@@ -1068,13 +1270,14 @@ function showToast(msg, undoFn){
 function renderUnpaid(){
   const mk = acc.month;
   const ml = MONTHS.find(m=>m.k===mk).l;
-  const scope = state.students.filter(s=>!acc.group || s.groupId===acc.group);
+  const closedM = isClosed(mk);
+  const scope = state.students.filter(s=>(!acc.group || s.groupId===acc.group) && (activeIn(s,mk)||isPaid(s,mk)));
   const paidL = scope.filter(s=>isPaid(s,mk)), unpaidL = scope.filter(s=>!isPaid(s,mk));
   const paidAmt = paidL.reduce((a,s)=>a+amountPaid(s,mk),0);
   const unpaidAmt = unpaidL.reduce((a,s)=>a+(s.price||0),0);
   const monthChips = MONTHS.map(m=>{
-    const n = scope.filter(s=>!isPaid(s,m.k)).length;
-    return `<button class="mchip ${m.k===mk?'active':''}" data-acc-month="${m.k}">${m.l}${n?`<span class="b">${n}</span>`:''}</button>`;
+    const n = state.students.filter(s=>(!acc.group||s.groupId===acc.group)&&activeIn(s,m.k)&&!isPaid(s,m.k)).length;
+    return `<button class="mchip ${m.k===mk?'active':''}" data-acc-month="${m.k}">${isClosed(m.k)?'🔒 ':''}${m.l}${n?`<span class="b">${n}</span>`:''}</button>`;
   }).join('');
   const groupChips = `<button class="mchip ${!acc.group?'active':''}" data-acc-group="">كل المجموعات</button>` +
     state.groups.map(g=>`<button class="mchip ${acc.group===g.id?'active':''}" data-acc-group="${g.id}">${escapeHtml(g.name)}</button>`).join('');
@@ -1089,17 +1292,22 @@ function renderUnpaid(){
       ${sts.map(s=>`<div class="acc-row">
         <span class="acc-name">${escapeHtml(s.name)}</span>
         <span class="acc-price ${(showPaid?amountPaid(s,mk):s.price)?'':'none'}">${(showPaid?amountPaid(s,mk):s.price)?money(showPaid?amountPaid(s,mk):s.price):'حدد السعر'}</span>
-        ${showPaid
+        ${closedM ? '' : (showPaid
           ? `<button class="btn small" data-acc-unpay="${s.id}">↩ رجّعه لسه</button>`
-          : `<button class="btn small gold" data-acc-pay="${s.id}">✓ دفع</button>`}
+          : `<button class="btn small gold" data-acc-pay="${s.id}">✓ دفع</button>`)}
+        <button class="icon-x" data-rm-st="${s.id}" title="مبقاش يجي / حذف">✕</button>
       </div>`).join('')}
     </div>`;
   }).join('');
   return `
     <div class="topline">
       <div><h2>الحسابات — ${ml}</h2><div class="sub">كل شهر حسابه لوحده، من غير ما يتجمع عليه القديم</div></div>
-      <button class="btn" onclick="window.print()">🖨️ طباعة</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn" data-close-month="${mk}">${closedM?'🔓 فتح الشهر':'🔒 إقفال الشهر'}</button>
+        <button class="btn" onclick="window.print()">🖨️ طباعة</button>
+      </div>
     </div>
+    ${closedM?`<div class="lockbar"><span>🔒 ${ml} مقفول — مفيش فلوس بتدخل الشهر ده، وأرقامه ثابتة.</span><button class="btn small" data-close-month="${mk}">فتح الشهر</button></div>`:''}
     <div class="mchips">${monthChips}</div>
     <div class="mchips">${groupChips}</div>
     <div class="grid-stats">
@@ -1116,14 +1324,14 @@ function renderUnpaid(){
 }
 
 /* ============================= PRICES ============================= */
-function groupMonthly(gid){ return studentsOf(gid).reduce((a,s)=>a+(s.price||0),0); }
+function groupMonthly(gid){ return studentsOf(gid).filter(s=>activeIn(s,defaultMonthKey())).reduce((a,s)=>a+(s.price||0),0); }
 function renderPrices(){
   return `
     <div class="topline">
       <div><h2>أسعار الطلاب</h2><div class="sub">اكتب سعر كل طالب، أو سعر موحد للمجموعة كلها. بيتحفظ لوحده.</div></div>
     </div>
     ${state.groups.map(g=>{
-      const sts = studentsOf(g.id).slice().sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+      const sts = studentsOf(g.id).filter(s=>activeIn(s,defaultMonthKey())).sort((a,b)=>a.name.localeCompare(b.name,'ar'));
       return `<div class="panel price-grp" style="border-top:4px solid ${g.color}">
         <div class="price-head"><h3>${escapeHtml(g.name)}</h3><span style="font-weight:900;color:var(--gold);">إجمالي شهري: <span id="pt-${g.id}">${money(groupMonthly(g.id))}</span></span></div>
         ${sts.length?`
@@ -1131,9 +1339,11 @@ function renderPrices(){
         ${sts.map(s=>`<div class="acc-row" style="border:1px solid var(--border);border-radius:10px;margin-bottom:6px;">
           <span class="acc-name">${escapeHtml(s.name)}</span>
           <input type="number" min="0" inputmode="numeric" class="price-in" data-price="${s.id}" data-pgroup="${g.id}" value="${s.price!=null?s.price:''}" placeholder="—"> <span class="acc-price">جنيه</span>
+          <button class="icon-x" data-rm-st="${s.id}" title="مبقاش يجي / حذف">✕</button>
         </div>`).join('')}`:`<div class="empty-note">مفيش طلاب في المجموعة دي.</div>`}
       </div>`;
     }).join('') || `<div class="empty-note">مفيش مجموعات.</div>`}
+    ${leftPanelHtml()}
   `;
 }
 
@@ -1146,15 +1356,16 @@ function runTopSearch(q){
   const res = state.students.filter(s=>s.name.includes(q)).slice(0,30);
   box.style.display='block';
   box.innerHTML = res.length ? res.map(s=>{
-    const g = groupById(s.groupId), paid = isPaid(s,mk);
+    const g = groupById(s.groupId), paid = isPaid(s,mk), gone = !activeIn(s,mk) && !paid;
     return `<div class="ts-row">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <span class="dot" style="background:${g?g.color:'#94A3B8'}"></span><b>${escapeHtml(s.name)}</b>
         <span class="grp-tag" style="font-size:11.5px;font-weight:700;background:${g?g.color+'20':''};color:${g?g.color:''};padding:3px 9px;border-radius:20px;">${g?escapeHtml(g.name):'غير مصنف'}</span>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
-        <span class="ts-st ${paid?'paid':'unpaid'}">${paid?'✓ دفع':'لسه ما دفع'} ${ml}</span>
-        ${paid?`<button class="btn small" data-ts="${s.id}">↩ تراجع</button>`:`<button class="btn small gold" data-ts="${s.id}">✓ دفع</button>`}
+        ${gone
+          ? `<span class="ts-st" style="color:var(--muted)">🚪 مبقاش يجي من ${monthLabel(s.leftFrom)}</span><button class="btn small" data-restore-st="${s.id}">رجّعه</button>`
+          : `<span class="ts-st ${paid?'paid':'unpaid'}">${paid?'✓ دفع':'لسه ما دفع'} ${ml}</span>${isClosed(mk)?'':(paid?`<button class="btn small" data-ts="${s.id}">↩ تراجع</button>`:`<button class="btn small gold" data-ts="${s.id}">✓ دفع</button>`)}<button class="icon-x" data-rm-st="${s.id}" title="مبقاش يجي / حذف">✕</button>`}
       </div>
     </div>`;
   }).join('') : `<div class="empty-note" style="margin:6px;">مفيش طالب اسمه فيه "${escapeHtml(q)}".</div>`;
@@ -1172,8 +1383,153 @@ function runTopSearch(q){
   document.addEventListener('click', e=>{ if(!e.target.closest('.tsearch')) box.style.display='none'; });
 })();
 
+/* ============================= طلاب مبقوش يجوا + إقفال الشهر ============================= */
+function monthLabel(k){ const m=MONTHS.find(x=>x.k===k); return m?m.l:(k||''); }
+/* الطالب "شغّال" في شهر لو معندوش شهر ترك، أو الشهر ده قبل شهر الترك */
+function activeIn(st,mk){ return !st.leftFrom || mk < st.leftFrom; }
+function isClosed(mk){ return !!(state && state.closed && state.closed[mk]); }
+function openRemoveStudent(sid){
+  const st=state.students.find(x=>x.id===sid); if(!st) return;
+  const opts=MONTHS.map(m=>`<option value="${m.k}" ${m.k===acc.month?'selected':''}>${m.l}</option>`).join('');
+  openModal(`
+    <h3>${escapeHtml(st.name)}</h3>
+    <div class="rm-opt">
+      <b>🚪 مبقاش يجي</b>
+      <div class="tiny" style="color:var(--muted);font-size:12.5px;line-height:1.7;">بيتشال من قوايم «لسه ما دفعش» ومن الحسابات من الشهر اللي تختاره وبعده. الشهور اللي فاتت وفلوسها بتفضل زي ما هي، وتقدر ترجّعه بعدين.</div>
+      <select id="rmFrom">${opts}</select>
+      <button class="btn gold" id="rmLeave">تأكيد: مبقاش يجي</button>
+    </div>
+    <div class="rm-opt danger">
+      <b>🗑️ حذف نهائي</b>
+      <div class="tiny" style="color:var(--muted);font-size:12.5px;line-height:1.7;">بيمسح الطالب وكل سجل دفعه من البرنامج خالص (حتى الشهور اللي فاتت).</div>
+      <button class="btn danger" id="rmDel">حذف نهائي</button>
+    </div>
+    <div class="row"><button class="btn ghost" onclick="closeModal()">إلغاء</button></div>`);
+  document.getElementById('rmLeave').onclick=()=>{
+    st.leftFrom=document.getElementById('rmFrom').value; save(); closeModal(); render();
+    showToast('🚪 '+escapeHtml(st.name)+' اتشال من '+monthLabel(st.leftFrom)+' وبعده',()=>{ delete st.leftFrom; save(); render(); });
+  };
+  document.getElementById('rmDel').onclick=()=>{
+    confirmAction('متأكد إنك تحذف <b>'+escapeHtml(st.name)+'</b> نهائياً مع كل سجل دفعه؟',()=>{
+      state.students=state.students.filter(x=>x.id!==sid); save(); render();
+    });
+  };
+}
+function leftPanelHtml(){
+  const cur=defaultMonthKey();
+  const left=state.students.filter(s=>!activeIn(s,cur));
+  if(!left.length) return '';
+  return `<div class="panel" style="margin-top:6px;"><div class="section-title" style="margin-top:0;">🚪 مبقوش يجوا (${left.length})</div>
+    ${left.map(s=>{ const g=groupById(s.groupId); return `<div class="acc-row" style="border:1px solid var(--border);border-radius:10px;margin-bottom:6px;">
+      <span class="acc-name">${escapeHtml(s.name)} <span class="acc-price">${g?'— '+escapeHtml(g.name):''} — من ${monthLabel(s.leftFrom)}</span></span>
+      <button class="btn small" data-restore-st="${s.id}">رجّعه</button></div>`; }).join('')}
+  </div>`;
+}
+document.addEventListener('click',e=>{
+  const rm=e.target.closest('[data-rm-st]');
+  if(rm){ const bx=document.getElementById('topSearchResults'); if(bx) bx.style.display='none'; openRemoveStudent(rm.dataset.rmSt); return; }
+  const rs=e.target.closest('[data-restore-st]');
+  if(rs){ const st=state.students.find(x=>x.id===rs.dataset.restoreSt); if(st){ delete st.leftFrom; save(); render(); const bx=document.getElementById('topSearchResults'); if(bx) bx.style.display='none'; showToast('↩ '+escapeHtml(st.name)+' رجع'); } return; }
+  const cm=e.target.closest('[data-close-month]');
+  if(cm){ toggleCloseMonth(cm.dataset.closeMonth); return; }
+  const sm=e.target.closest('[data-stat-month]');
+  if(sm){ acc.month=sm.dataset.statMonth; render(); return; }
+});
+function toggleCloseMonth(mk){
+  const ml=monthLabel(mk);
+  if(isClosed(mk)){
+    confirmAction('تفتح '+ml+' تاني؟ التعديل على الدفع هيرجع يشتغل، وأرقام الإقفال القديمة هتتحدّث بعد التعديل.',()=>{ delete state.closed[mk]; save(); render(); });
+    return;
+  }
+  const m=monthStats(mk,true);
+  confirmAction('إقفال <b>'+ml+'</b>؟<br>المحصّل: <b>'+money(m.collected)+'</b> من '+m.paidN+' طالب.<br>لسه ما دفعوش: <b>'+m.unpaidN+'</b> طالب ('+money(m.outstanding)+') هيفضلوا متأخرات.<br>بعد الإقفال مفيش فلوس بتدخل الشهر ده، وتقدر تفتحه تاني لو احتجت.',()=>{
+    state.closed[mk]={at:new Date().toISOString(), snap:m}; save(); render();
+    showToast('🔒 '+ml+' اتقفل');
+  });
+}
+
+/* ============================= STATS ============================= */
+function monthStats(mk, live){
+  if(!live && isClosed(mk) && state.closed[mk].snap) return state.closed[mk].snap;
+  const sts=state.students.filter(s=>activeIn(s,mk)||isPaid(s,mk));
+  const byGroup=state.groups.map(g=>{
+    const gs=sts.filter(s=>s.groupId===g.id);
+    const paid=gs.filter(s=>isPaid(s,mk)), unp=gs.filter(s=>!isPaid(s,mk));
+    return {id:g.id,name:g.name,color:g.color,total:gs.length,paidN:paid.length,unpaidN:unp.length,
+      collected:paid.reduce((a,s)=>a+amountPaid(s,mk),0), outstanding:unp.reduce((a,s)=>a+(s.price||0),0)};
+  }).filter(g=>g.total>0);
+  const collected=byGroup.reduce((a,g)=>a+g.collected,0), outstanding=byGroup.reduce((a,g)=>a+g.outstanding,0);
+  const paidN=byGroup.reduce((a,g)=>a+g.paidN,0), unpaidN=byGroup.reduce((a,g)=>a+g.unpaidN,0);
+  const noPrice=sts.filter(s=>!isPaid(s,mk)&&!s.price).length;
+  const expected=collected+outstanding;
+  return {mk,collected,outstanding,expected,paidN,unpaidN,total:paidN+unpaidN,noPrice,rate:expected?Math.round(collected/expected*100):0,byGroup};
+}
+function renderStats(){
+  const mk=acc.month, ml=monthLabel(mk), closedM=isClosed(mk);
+  const m=monthStats(mk);
+  const i=MONTHS.findIndex(x=>x.k===mk);
+  const prev=i>0?monthStats(MONTHS[i-1].k):null;
+  let delta='';
+  if(prev && prev.total>0){
+    const d=m.collected-prev.collected;
+    delta=`<div class="d">${d>=0?'▲':'▼'} ${money(Math.abs(d))} ${d>=0?'أكتر':'أقل'} من ${monthLabel(MONTHS[i-1].k)}</div>`;
+  }
+  const all=MONTHS.map(x=>monthStats(x.k));
+  const maxExp=Math.max(1,...all.map(x=>x.expected));
+  const yearTotal=all.reduce((a,x)=>a+x.collected,0);
+  const activeMonths=all.filter(x=>x.collected>0);
+  const avg=activeMonths.length?Math.round(yearTotal/activeMonths.length):0;
+  const best=activeMonths.length?activeMonths.reduce((a,b)=>b.collected>a.collected?b:a):null;
+  const arrears=MONTHS.filter(x=>isClosed(x.k)).reduce((a,x)=>a+monthStats(x.k).outstanding,0);
+  const monthChips=MONTHS.map(x=>`<button class="mchip ${x.k===mk?'active':''}" data-stat-month="${x.k}">${isClosed(x.k)?'🔒 ':''}${x.l}</button>`).join('');
+  const grp=m.byGroup.slice().sort((a,b)=>b.collected-a.collected);
+  const topG=grp.length&&grp[0].collected>0?grp[0]:null;
+  const gHtml=grp.length?grp.map(g=>{
+    const pct=(g.collected+g.outstanding)?Math.round(g.collected/(g.collected+g.outstanding)*100):0;
+    return `<div class="gstat">
+      <div class="nm"><span class="dot" style="background:${g.color}"></span>${escapeHtml(g.name)}</div>
+      <div><div class="pbar"><i style="width:${pct}%;background:${g.color}"></i></div><div style="font-size:11.5px;color:var(--muted);margin-top:4px;font-weight:700;">${g.paidN} من ${g.total} دفعوا — ${pct}%</div></div>
+      <div style="text-align:left;font-weight:900;">${money(g.collected)}${g.outstanding?`<div style="font-size:11.5px;color:var(--unpaid);font-weight:700;">متبقي ${money(g.outstanding)}</div>`:''}</div>
+    </div>`;
+  }).join(''):'<div class="empty-note">مفيش طلاب في الشهر ده.</div>';
+  const yr=MONTHS.map((x,j)=>{
+    const st=all[j]; const h=Math.round(st.expected/maxExp*100); const gp=st.expected?Math.round(st.collected/st.expected*100):0;
+    return `<div class="yr-col ${x.k===mk?'sel':''}" data-stat-month="${x.k}" title="${x.l}: ${money(st.collected)}">
+      <div class="yr-bar" style="height:${st.expected?Math.max(h,4):0}%"><i style="height:${gp}%"></i></div>
+      <div class="yr-lbl">${x.l.split(' ')[0]}</div></div>`;
+  }).join('');
+  const notes=[];
+  if(m.noPrice) notes.push(`⚠️ ${m.noPrice} طالب لسه ما دفعوش ومن غير سعر — الرقم المتوقع ناقص. حدد أسعارهم من «الأسعار».`);
+  if(topG) notes.push(`🏆 أعلى مجموعة تحصيل: <b>${escapeHtml(topG.name)}</b> (${money(topG.collected)}).`);
+  if(arrears) notes.push(`📌 متأخرات الشهور المقفولة: <b>${money(arrears)}</b>.`);
+  return `
+    <div class="topline">
+      <div><h2>إحصائيات — ${ml}</h2><div class="sub">${closedM?'🔒 الشهر مقفول — الأرقام ثابتة':'الشهر لسه مفتوح — الأرقام بتتحدّث مع كل دفعة'}</div></div>
+      <button class="btn ${closedM?'':'gold'}" data-close-month="${mk}">${closedM?'🔓 فتح الشهر':'🔒 إقفال الشهر'}</button>
+    </div>
+    <div class="mchips">${monthChips}</div>
+    <div class="kpis">
+      <div class="kpi main-kpi"><div class="k">💰 المحصّل في ${ml}</div><div class="v">${money(m.collected)}</div>${delta}</div>
+      <div class="kpi"><div class="k">⏳ لسه ما اتحصّلش</div><div class="v" style="color:var(--unpaid)">${money(m.outstanding)}</div><div class="d">${m.unpaidN} طالب</div></div>
+      <div class="kpi"><div class="k">🎯 المتوقع للشهر</div><div class="v">${money(m.expected)}</div><div class="d">${m.total} طالب</div></div>
+      <div class="kpi"><div class="k">📈 نسبة التحصيل</div><div class="v" style="color:var(--paid)">${m.rate}%</div><div class="pbar" style="margin-top:10px;"><i style="width:${m.rate}%"></i></div></div>
+    </div>
+    ${notes.length?`<div class="panel" style="margin-bottom:16px;line-height:2;font-size:14px;font-weight:600;">${notes.join('<br>')}</div>`:''}
+    <div class="panel" style="margin-bottom:16px;"><div class="section-title" style="margin-top:0;">المجموعات في ${ml}</div>${gHtml}</div>
+    <div class="panel"><div class="section-title" style="margin-top:0;">السنة كلها</div>
+      <div class="kpis" style="margin-bottom:6px;">
+        <div class="kpi"><div class="k">إجمالي المحصّل</div><div class="v">${money(yearTotal)}</div></div>
+        <div class="kpi"><div class="k">متوسط الشهر</div><div class="v">${money(avg)}</div></div>
+        <div class="kpi"><div class="k">أحسن شهر</div><div class="v" style="font-size:19px;">${best?monthLabel(best.mk):'—'}</div><div class="d">${best?money(best.collected):''}</div></div>
+      </div>
+      <div class="yr">${yr}</div>
+      <div class="legend"><span><i style="background:var(--paid)"></i>اتحصّل</span><span><i style="background:#FCA5A5"></i>متبقي</span><span>دوس على أي شهر تفتحه</span></div>
+    </div>
+  `;
+}
+
 /* ============================= FREE SLOTS SEARCH ============================= */
-const PAIRS = [['السبت','الثلاثاء'],['الأحد','الأربعاء'],['الاثنين','الخميس']];
+const PAIRS = [['السبت','الثلاثاء'],['الأحد','الأربعاء'],['الاثنين','الخميس'],['الجمعة']];
 let freeRange = {from:8, to:22};
 function toMin(t){ const [h,m]=(t||'0:0').split(':').map(Number); return h*60+m; }
 /* الحصة بتاخد ساعة؛ الوقت مشغول لو في حصة عليها مجموعة بتتداخل معاه */
@@ -1196,70 +1552,127 @@ function setFreeRange(){
   render();
 }
 function hourLabel(h){ return to12h(String(h).padStart(2,'0')+':00'); }
+let freePair='all';
+function lessonsOf(day){ return (state.schedule[day]||[]).filter(l=>l.groupId); }
+function lessonNear(day,t){
+  let best=null,bd=999;
+  lessonsOf(day).forEach(l=>{ const d=Math.abs(toMin(l.time)-t); if(d<60&&d<bd){bd=d;best=l;} });
+  return best ? {l:best,d:bd} : null;
+}
+function pairTitle(days){ return days.join(' + '); }
 function dayFreeHtml(day){
-  const periods = [
+  const periods=[
     {l:'☀️ صباحاً', test:h=>h<12},
     {l:'🌤️ ظهراً وعصراً', test:h=>h>=12 && h<17},
     {l:'🌙 مساءً وليلاً', test:h=>h>=17},
   ];
   const hours=[];
   for(let h=freeRange.from; h<=freeRange.to; h++) if(!busyAt(day,h*60)) hours.push(h);
-  const body = periods.map(p=>{
-    const hs = hours.filter(p.test);
+  const body=periods.map(p=>{
+    const hs=hours.filter(p.test);
     if(!hs.length) return '';
     return `<div class="free-period"><div class="pl">${p.l}</div><div class="chips">${hs.map(h=>{
-      const fv = freedAt(day,h*60);
+      const fv=freedAt(day,h*60);
       return `<button class="chip ${fv?'fromvac':''}" data-book="${day}|${h}" title="دوس لحجزه">${hourLabel(h)}${fv?' 🔴':''}</button>`;
     }).join('')}</div></div>`;
   }).join('');
-  return `<div><h4 style="margin:0 0 10px;font-size:16px;font-weight:900;color:var(--gold);">${escapeHtml(day)} <span style="color:var(--muted);font-size:12px;">(${hours.length} ساعة فاضية)</span></h4>${body || '<div class="empty-note">مفيش مواعيد فاضية.</div>'}</div>`;
+  return `<div class="day-free">
+    <div class="day-free-head"><b>${escapeHtml(day)}</b><span class="cnt">${hours.length}</span></div>
+    ${body||'<div class="empty-note" style="padding:14px;">مفيش ساعات فاضية</div>'}
+  </div>`;
+}
+function heatmapHtml(){
+  const cols=[].concat(...PAIRS);
+  const rows=[];
+  for(let h=freeRange.from; h<=freeRange.to; h++){
+    const t=h*60;
+    rows.push(`<div class="hm-h">${(h%12||12)+(h>=12?'م':'ص')}</div>`+cols.map((day,ci)=>{
+      const sep=(ci===1||ci===3||ci===5)?' hm-sep':'';
+      const n=lessonNear(day,t);
+      if(n){
+        const g=groupById(n.l.groupId), col=g?g.color:'#94A3B8';
+        return `<div class="hm-c busy${sep}" style="background:${col};color:${bestTextColor(col)}" title="${escapeHtml(day)} — ${to12h(n.l.time)} — ${g?escapeHtml(g.name):''}">${n.d<=30&&g?escapeHtml(g.name):'·'}</div>`;
+      }
+      const fv=freedAt(day,t);
+      return `<button class="hm-c free${fv?' fv':''}${sep}" data-book="${day}|${h}" title="${escapeHtml(day)} ${hourLabel(h)} — فاضي، دوس لحجزه">${fv?'🔴':'＋'}</button>`;
+    }).join(''));
+  }
+  const head='<div class="hm-h"></div>'+cols.map((d,ci)=>`<div class="hm-d${(ci===1||ci===3||ci===5)?' hm-sep':''}">${escapeHtml(d)}</div>`).join('');
+  return `<div class="hm-wrap"><div class="hm">${head}${rows.join('')}</div></div>`;
 }
 function renderFree(){
-  const hourOpts = (sel)=>Array.from({length:17},(_,i)=>i+7).map(h=>`<option value="${h}" ${h===sel?'selected':''}>${hourLabel(h)}</option>`).join('');
-  const pairsHtml = PAIRS.map(([d1,d2])=>`
-    <div class="panel free-pair">
-      <h3>${d1} + ${d2}</h3>
-      <div class="free-cols">${dayFreeHtml(d1)}${dayFreeHtml(d2)}</div>
+  const hourOpts=(sel)=>Array.from({length:17},(_,i)=>i+7).map(h=>`<option value="${h}" ${h===sel?'selected':''}>${hourLabel(h)}</option>`).join('');
+  const presets=[['الكل',8,22],['☀️ صباحي',8,11],['🌤️ بعد الضهر',12,16],['🌙 مسائي',17,22]];
+  const presetHtml=presets.map(([l,a,b])=>`<button class="mchip ${freeRange.from===a&&freeRange.to===b?'active':''}" data-frange="${a}-${b}">${l}</button>`).join('');
+  const pairChips=`<button class="mchip ${freePair==='all'?'active':''}" data-fpair="all">كل الأيام</button>`+
+    PAIRS.map((d,i)=>`<button class="mchip ${freePair===String(i)?'active':''}" data-fpair="${i}">${pairTitle(d)}</button>`).join('');
+  const pc=['#0284C7','#8B5CF6','#F59E0B','#10B981'];
+  const pairsHtml=PAIRS.map((d,i)=>({d,i})).filter(x=>freePair==='all'||freePair===String(x.i)).map(({d,i})=>`
+    <div class="panel pair-card" style="--pc:${pc[i%pc.length]}">
+      <h3><span class="pair-dot"></span>${pairTitle(d)}</h3>
+      <div class="pair-cols ${d.length===1?'single':''}">${d.map(dayFreeHtml).join('')}</div>
     </div>`).join('');
-  const freed = state.freed||[];
-  const vacHtml = freed.length ? freed.map(f=>{
+  const freed=state.freed||[];
+  const vacHtml=freed.length?freed.map(f=>{
     const g=groupById(f.groupId);
     return `<div class="vac-item"><span>🔴 ${escapeHtml(f.day)} — ${to12h(f.time)}${g?' — كان: '+escapeHtml(g.name):''}</span>
       <button class="btn small" data-restore="${f.id}">رجّع الحصة للجدول</button></div>`;
-  }).join('') : '<div class="empty-note">مفيش مواعيد اتخلت.</div>';
+  }).join(''):'<div class="empty-note">مفيش مواعيد اتخلت.</div>';
   return `
     <div class="topline">
-      <div><h2>بحث عن مواعيد</h2><div class="sub">السبت مع الثلاثاء، الأحد مع الأربعاء، الاثنين مع الخميس — كل يوم وفاضيه بشكل مستقل، واختار اللي يناسب الطلاب</div></div>
+      <div><h2>المواعيد الفاضية</h2><div class="sub">كل يوم وساعاته الفاضية — دوس على أي ساعة وتحجزها</div></div>
     </div>
-    <div class="range-row">
+    <div class="mchips">${presetHtml}</div>
+    <div class="range-row" style="margin-bottom:14px;">
       <span style="font-weight:700;color:var(--muted);">من</span><select id="freeFrom" onchange="setFreeRange()">${hourOpts(freeRange.from)}</select>
       <span style="font-weight:700;color:var(--muted);">إلى</span><select id="freeTo" onchange="setFreeRange()">${hourOpts(freeRange.to)}</select>
-      <span style="font-size:12.5px;color:var(--muted);">🟢 فاضي من الأصل &nbsp; 🔴 ميعاد اتخلى — دوس على أي ميعاد عشان تحجزه</span>
     </div>
+    <div class="panel" style="margin-bottom:16px;"><div class="section-title" style="margin-top:0;">🗓️ خريطة الأسبوع</div>
+      <div class="legend" style="margin:0 0 10px;"><span><i style="background:#D1FAE5;border:1px solid #10B981"></i>فاضي (دوس لحجزه)</span><span><i style="background:#FEE2E2;border:1px dashed #EF4444"></i>اتخلى</span><span>الملوّن = حصة مجموعة</span></div>
+      ${heatmapHtml()}</div>
+    <div class="mchips">${pairChips}</div>
     ${pairsHtml}
     <div class="panel"><div class="section-title" style="margin-top:0;">المواعيد اللي اتخلت (اتنقلت من الجدول)</div><div class="vac-list">${vacHtml}</div></div>
   `;
 }
+function partnerOf(day){
+  const pr=PAIRS.find(d=>d.length>1&&d.includes(day));
+  return pr?pr.find(x=>x!==day):null;
+}
 function openBook(day,h){
-  const time = String(h).padStart(2,'0')+':00';
+  const time=String(h).padStart(2,'0')+':00';
+  const partner=partnerOf(day);
+  const partnerFree=partner && !busyAt(partner,h*60);
   openModal(`
-    <h3>حجز ${hourLabel(h)}</h3>
-    <p style="margin:0 0 14px;font-weight:700;">${escapeHtml(day)}</p>
+    <h3>حجز ${escapeHtml(day)} — ${hourLabel(h)}</h3>
     <label class="tiny">المجموعة</label>
     ${groupSelectHtml('bookGroup','',null,'width:100%;background:var(--surface);border:2px solid var(--border-strong);color:var(--cream);border-radius:8px;padding:10px 14px;font-family:inherit;font-weight:700;')}
+    ${partnerFree?`<label style="display:flex;align-items:center;gap:8px;margin-top:14px;font-weight:700;cursor:pointer;"><input type="checkbox" id="bookPartner" checked> احجز كمان ${escapeHtml(partner)} في نفس الساعة</label>`:''}
     <div class="row"><button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn gold" id="confirmBook">احجز</button></div>`);
   onGroupSelChange('bookGroup');
-  document.getElementById('confirmBook').onclick = ()=>{
-    const gid = document.getElementById('bookGroup').value;
+  document.getElementById('confirmBook').onclick=()=>{
+    const gid=document.getElementById('bookGroup').value;
     if(gid==='__new__'){ onGroupSelChange('bookGroup'); return; }
     if(!gid) return;
-    if(!state.schedule[day]) state.schedule[day]=[];
-    if(!state.days.includes(day)) state.days.push(day);
-    state.schedule[day].push({id:uid(), time, groupId:gid});
-    state.freed = (state.freed||[]).filter(f=>!(f.day===day && Math.abs(toMin(f.time)-h*60)<60));
+    const days=[day];
+    const pb=document.getElementById('bookPartner');
+    if(pb && pb.checked) days.push(partner);
+    days.forEach(d=>{
+      if(!state.schedule[d]) state.schedule[d]=[];
+      if(!state.days.includes(d)) state.days.push(d);
+      state.schedule[d].push({id:uid(), time, groupId:gid});
+      state.freed=(state.freed||[]).filter(f=>!(f.day===d && Math.abs(toMin(f.time)-h*60)<60));
+    });
     save(); closeModal(); render();
+    showToast('✓ اتحجز '+hourLabel(h)+' — '+days.join(' + '));
   };
 }
+document.addEventListener('click',e=>{
+  const fr=e.target.closest('[data-frange]');
+  if(fr){ const [a,b]=fr.dataset.frange.split('-').map(Number); freeRange={from:a,to:b}; render(); return; }
+  const fp=e.target.closest('[data-fpair]');
+  if(fp){ freePair=fp.dataset.fpair; freeShowAll=false; render(); return; }
+});
 
 /* ============================= إضافة طلاب كتير مرة واحدة ============================= */
 function parseNames(text){
